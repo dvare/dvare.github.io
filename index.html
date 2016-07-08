@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Architects+Daughter" rel="stylesheet" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen"/>
+
+    <title>JVM Rules</title>
+</head>
+
+<body>
+<header>
+    <h1>JVM Rules</h1>
+    <p> Light wight a Rule engine that can execute one or more text based rules in a runtime.</p>
+
+    <a href="https://github.com/JVMRules/JVM-Rules-Core#fork-destination-box">
+        <img class="gh-forkme" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
+             alt="Fork me on GitHub">
+    </a>
+
+    <ul>
+        <li><a href="#">ZIP File <strong>Download</strong></a></li>
+        <li><a href="https://github.com/JVMRules/JVM-Rules-Core">View On <strong>GitHub</strong></a></li>
+        <li><a href="https://github.com/JVMRules/JVM-Rules-Core#fork-destination-box">Fork on <strong>GitHub</strong> </a></li>
+    </ul>
+</header>
+
+<p id="main">
+<h2
+        id="jvmrulesbuildstatushttpstravisciorgjvmrulesjvmrulescoresvgbranchmasterhttpstravisciorgjvmrulesjvmrulescore">
+    JVM Rules <a href="https://travis-ci.org/JVMRules/JVM-Rules-Core"><img
+        src="https://travis-ci.org/JVMRules/JVM-Rules-Core.svg?branch=master" alt="Build Status"></a></h2>
+
+<p>JVM Rules is a light wight a Rule engine that can execute one or more text based rules in a runtime.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>JVM Rules API has two parts one is Rule Registry and other is Rule Evaluator. Rule registry keeps all expressions
+    that can apply on data. Rule registry provides the interface to register and unregister expressions at runtime.
+    Rule Evaluator validate dataSet against the Rule Registry and return the result against every expression.</p>
+
+<h3 id="datatypessyntax">DataTypes Syntax</h3>
+
+<table class="table-style-one">
+    <thead>
+    <tr>
+        <th>Value Expression</th>
+        <th>String</th>
+        <th>Integer</th>
+        <th>Float</th>
+        <th>Boolean</th>
+        <th>Regex</th>
+        <th>Date</th>
+        <th>DateTime</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Type</td>
+        <td>'A'</td>
+        <td>4</td>
+        <td>4.2</td>
+        <td>true,false</td>
+        <td>[R'*']</td>
+        <td>[15-01-12016]</td>
+        <td>[15-01-12016-10:20:56]</td>
+    </tr>
+    <tr>
+        <td>List</td>
+        <td>{'A','B'}</td>
+        <td>{2,5}</td>
+        <td>{3.1,5.5}</td>
+        <td>{true,false}</td>
+        <td>{[R'*'],[R'*']}</td>
+        <td>{[15-01-2016],[20-02-2016]}</td>
+        <td>{[15-01-12016-15:20:56],[20-02-12016-23:20:56]}</td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h3 id="supportedoperations">Supported Operations</h3>
+
+<p>JVM Rules supports all common used operations bellow table explain about operations</p>
+<p>
+<table class="table-style-one">
+    <thead>
+    <tr>
+        <th> Operation Name</th>
+        <th> Syntax</th>
+        <th> DataTypes</th>
+        <th>Value Expression</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td> EQUAL</td>
+        <td> Equal, equal, =</td>
+        <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> NOT EQUAL</td>
+        <td> NotEqual, "notequal, !=, <></td>
+        <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> LESS</td>
+        <td> Less, less, <</td>
+        <td> Integer, Float, String, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> LESS EQUAL</td>
+        <td> LessEqual, lessequal, <=</td>
+        <td> Integer, Float, String, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> GERATER</td>
+        <td> Greater, greater, ></td>
+        <td> Integer, Float, String, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> GERATER EQUAL</td>
+        <td> GreaterEqual, greaterequal, >=</td>
+        <td> Integer, Float, String, Date, DateTime</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> INL</td>
+        <td> IN,In ,in</td>
+        <td> Integer, Float, String, Boolean,Regex, Date, DateTime</td>
+        <td> List</td>
+    </tr>
+    <tr>
+        <td> BETWEENL</td>
+        <td> Between, between</td>
+        <td> Integer, Float, Date, DateTime</td>
+        <td> List {size=2}</td>
+    </tr>
+    <tr>
+        <td> AND</td>
+        <td> AND, And, and</td>
+        <td> Boolean</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> OR</td>
+        <td> OR, Or, or</td>
+        <td> Boolean</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> IMPLIES</td>
+        <td> Implies, implies, =></td>
+        <td> Boolean</td>
+        <td> Type</td>
+    </tr>
+    <tr>
+        <td> NOT</td>
+        <td> NOT, Not, not</td>
+        <td> Boolean</td>
+        <td> Type</td>
+    </tr>
+    </tbody>
+</table>
+</p>
+<h3 id="basicsyntax">Basic Syntax</h3>
+
+<pre><code class="java language-java">import com.jvmrules.factory.RuleFactory;
+import com.jvmrules.exceptions.ExpressionParseException;
+import com.jvmrules.expression.Expression;
+import com.jvmrules.expression.veriable.StringVeriable;
+import com.jvmrules.parser.ExpressionParser;
+
+public class MyApp {
+
+    public static void main (String[] args) {
+        RuleFactory factory = RuleFactory.INSTANCE;
+               Map&lt;String, Class&gt; types = new HashMap&lt;&gt;();
+               types.put("V1", StringVeriable.class);
+               types.put("V2", IntegerVeriable.class);
+               types.put("V3", FloatVeriable.class);
+               types.put("V4", BooleanVeriable.class);
+
+               String exp="V1 = A AND ( ( V2 = 'O' AND V3 = 'R' ) OR ( V4 = 'G' AND V5 in {'M','N'} ) )";
+               Expression expression = ExpressionParser.fromString(exp, types);
+
+               RuleRegistry rules = new RuleRegistry(expression);
+
+               Map&lt;String, String&gt; bindings = new HashMap&lt;&gt;();
+               bindings.put("V1", "'A'");
+               bindings.put("V2", "2");
+               bindings.put("V3", "3.2");
+               bindings.put("V4", "false");
+               RuleEvaluator evaluator = factory.Evaluator;
+               HashMap&lt;Expression,Boolean&gt; results = evaluator.evaluate(rules, bindings);
+
+    }
+}
+</code></pre>
+
+<h2 id="license">License</h2>
+
+<p>JVM Rules is released under the <a href="http://opensource.org/licenses/MIT"><img
+        src="http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat" alt="MIT license"></a>.</p>
+
+<pre><code>The MIT License (MIT)
+
+Copyright (c) 2016 Muhammad Hammad
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</code></pre>
+</div>
+<footer>
+    <hr/>
+    <div class="inner">
+        by <a href="https://github.com/hammadirshad">Muhammad Hammad</a>
+    </div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+
+<script src="https://cdn.rawgit.com/showdownjs/showdown/1.4.2/dist/showdown.min.js"></script>
+<script>
+    /*$(document).ready(function () {
+
+     $(function () {
+
+
+     $.get("https://raw.githubusercontent.com/JVMRules/JVM-Rules-Core/master/README.md", function(response) {
+
+     var converter = new showdown.Converter(),
+     text =response;
+     html = converter.makeHtml(text);
+     $("#main").html(html);
+     });
+
+
+
+     });
+     });*/
+</script>
+
+</body>
+</html>
