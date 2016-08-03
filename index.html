@@ -4,13 +4,14 @@
     <title>DVARE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="vendor/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/style.css" rel="stylesheet" media="screen, print">
+
     <link href="img/favicon.ico" rel="icon" type="image/x-icon">
 </head>
 <body>
 
-<div class="container-fluid" data-offset="0" data-spy="scroll" data-target="#scrollingNav">
+<div class="container-fluid" data-offset="0" data-spy="scroll" data-target="#">
     <div class="row-fluid">
         <style>.forkme {
             position: absolute;
@@ -48,6 +49,12 @@
                     <li>
                         <a href="#serviceCall">Service Call</a>
                     </li>
+                    <li class="nav-header"><a href="#examples">Example</a>
+                    </li>
+                    <li>
+                        <a href="#datavalidation">Data Validation</a>
+                    </li>
+
                 </ul>
             </nav>
         </div>
@@ -65,72 +72,75 @@
                         rules</p>
                 </div>
             </div>
-            <div id="divs">
-                <div id="dataType">
-                    <h1>DataTypes</h1>
-                    <div id="dataTypes">
+            <div id="sections">
 
+                <section id="dataTypes">
+                    <h2>Data Types</h2>
+                    <ul class="nav nav-tabs nav-tabs-examples">
+                        <li class="active">
+                            <a>Data Types</a>
+                        </li>
+                    </ul>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Data Type</th>
+                            <th>Type</th>
+                            <th>List Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>String</td>
+                            <td>'A'</td>
+                            <td>{'A','B'}</td>
+                        </tr>
+                        <tr>
+                            <td>Integer</td>
+                            <td>4</td>
+                            <td>{2,5}</td>
+                        </tr>
+                        <tr>
+                            <td>Float</td>
+                            <td>4.2</td>
+                            <td>{3.1,5.5}</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td>true,false</td>
+                            <td>{true,false}</td>
+                        </tr>
+                        <tr>
+                            <td>Regex</td>
+                            <td>R'*'</td>
+                            <td>[R'*',R'*']</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>[15-01-12016]</td>
+                            <td>{[15-01-2016],[20-02-2016]}</td>
+                        </tr>
+                        <tr>
+                            <td>DateTime</td>
+                            <td>[15-01-12016-10:20:56]</td>
+                            <td>{[15-01-12016-15:20:56],[20-02-12016-23:20:56]}</td>
+                        </tr>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                        <h2> DataTypes Syntax</h2>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Data Type</th>
-                                <th>Type</th>
-                                <th>List Type</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>String</td>
-                                <td>'A'</td>
-                                <td>{'A','B'}</td>
-                            </tr>
-                            <tr>
-                                <td>Integer</td>
-                                <td>4</td>
-                                <td>{2,5}</td>
-                            </tr>
-                            <tr>
-                                <td>Float</td>
-                                <td>4.2</td>
-                                <td>{3.1,5.5}</td>
-                            </tr>
-                            <tr>
-                                <td>Boolean</td>
-                                <td>true,false</td>
-                                <td>{true,false}</td>
-                            </tr>
-                            <tr>
-                                <td>Regex</td>
-                                <td>R'*'</td>
-                                <td>[R'*',R'*']</td>
-                            </tr>
-                            <tr>
-                                <td>Date</td>
-                                <td>[15-01-12016]</td>
-                                <td>{[15-01-2016],[20-02-2016]}</td>
-                            </tr>
-                            <tr>
-                                <td>DateTime</td>
-                                <td>[15-01-12016-10:20:56]</td>
-                                <td>{[15-01-12016-15:20:56],[20-02-12016-23:20:56]}</td>
-                            </tr>
-                            </tr>
-                            </tbody>
-                        </table>
+                </section>
 
-
-                        </article>
-
-                    </div>
-                </div>
-                <div id="validation-operations">
-                    <h1>Validation Operations</h1>
+                <section id="validation-operations">
+                    <h2>Validation Operations</h2>
+                    <p></p>
                     <div id="equalityOperations">
-                        <h2> Comparison Operations</h2>
-                        <p>Table explain common used Comparison Operations
-                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                            <li class="active">
+                                <a>Comparison Operations</a>
+                            </li>
+
+                        </ul>
                         <table>
                             <thead>
                             <tr>
@@ -219,9 +229,11 @@
                     </div>
                     <br/>
                     <div id="arithmeticOperations">
-                        <h2> Arithmetic Operations</h2>
-                        <p>Table explain common used Arithmetic Operations
-                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                            <li class="active">
+                                <a>Arithmetic Operations</a>
+                            </li>
+                        </ul>
                         <table>
                             <thead>
                             <tr>
@@ -279,18 +291,18 @@
                         </table>
 
 
-                        </article>
-
                     </div>
 
-                </div>
+                </section>
 
-                <div id="datacall-operations">
-                    <h1>Data Operations</h1>
+                <section id="datacall-operations">
+                    <h2>Data Operations</h2>
                     <div id="functioncall">
-                        <h2> Function Call</h2>
-                        <p>You can call any java function with in Expression
-                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                            <li class="active">
+                                <a>Function Call</a>
+                            </li>
+                        </ul>
                         <table>
                             <thead>
                             <tr>
@@ -313,25 +325,117 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </section>
+                <section id="examples">
+                    <h2>Examples</h2>
+                    <div id="datavalidation">
 
-            </div>
-            <div id="footer">
-                <div id="api-_footer"><h2 id="epilogue">DVARE</h2>
-                    <p>Suggestions, contact, support and error reporting on <a
-                            href="https://github.com/dvare/dvare/issues">GitHub</a></p>
+                        <pre class="prettyprint">
+                            <code class="language-java">
+package com.dvare;
+
+import com.dvare.binding.data.DataRow;
+import com.dvare.binding.data.DataSet;
+import com.dvare.binding.function.FunctionBinding;
+import com.dvare.binding.validation.ValidationResult;
+import com.dvare.binding.validation.ValidationRuleResult;
+import com.dvare.config.RuleConfiguration;
+import com.dvare.exceptions.ExpressionParseException;
+import com.dvare.expression.Expression;
+import com.dvare.expression.datatype.IntegerType;
+import com.dvare.binding.rule.Rule;
+import com.dvare.binding.rule.RuleRegistry;
+import com.dvare.evaluator.RuleEvaluator;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MyApp {
+
+    public static void main(String[] args) throws ExpressionParseException, ClassNotFoundException {
+       RuleConfiguration factory = new RuleConfiguration();
+        String _package = "com.dvare";
+        String _class = "MyApp";
+        Class tableClass = Class.forName(_package + "." + _class);
+        FunctionBinding tableBinding = new FunctionBinding("testFunction", tableClass, new IntegerType());
+        factory.registerFunction(tableBinding);
+
+        Map<String, String> types = new HashMap<>();
+        types.put("V0", "IntegerType");
+        types.put("V1", "StringType");
+        types.put("V2", "IntegerType");
+        types.put("V3", "FloatType");
+        types.put("V4", "BooleanType");
+        types.put("V5", "DateType");
+        types.put("V6", "DateTimeType");
+        types.put("V7", "RegexType");
+
+        String exp = "V2 = (1 + 2) " +
+                " And V0 <= fun( testFunction , 10 ) " +
+                " And V1 in ['A','B'] " +
+                " And V2 between [2,4]" +
+                " And V3 > 3.0 " +
+                " And V4 = false " +
+                " And V5 in [12-05-2016,13-05-2016] " +
+                " And V6 in [12-05-2016-15:30:00,13-05-2016-15:30:00] " +
+                " And V7 in [R'B1.*',R'A1.*'] ";
+
+        Expression expression = factory.getParser().fromString(exp, types);
+        Rule rule = new Rule(expression);
+        RuleRegistry rules = new RuleRegistry(rule);
+
+        Map<String, Object> dataRow = new HashMap<>();
+        dataRow.put("V0", "10");
+        dataRow.put("V1", "'A'");
+        dataRow.put("V2", "3");
+        dataRow.put("V3", "3.2");
+        dataRow.put("V4", "false");
+        dataRow.put("V5", "12-05-2016");
+        dataRow.put("V6", "12-05-2016-15:30:00");
+        dataRow.put("V7", "A1B2");
+
+        DataSet dataSet = new DataSet();
+        dataSet.addRow(new DataRow(dataRow));
+
+        RuleEvaluator evaluator = factory.getEvaluator();
+        ValidationResult results = evaluator.evaluate(rules, dataSet);
+
+        for (ValidationRuleResult ruleResult : results.getResults()) {
+            boolean result = !ruleResult.isError();
+            System.out.println("ValidationResult : " + result);
+        }
+    }
+
+    public Integer testFunction(Integer veriable) {
+        System.out.println("inside testFunction with argument literal: " + veriable);
+        return veriable;
+    }
+
+}
+                            </code>
+                        </pre>
+                    </div>
+                </section>
+                <div id="footer">
+                    <div id="api-_footer">
+                        <p>Suggestions, contact, support and error reporting on <a
+                                href="https://github.com/dvare/dvare/issues">GitHub</a></p>
+                    </div>
                 </div>
-            </div>
-            <div id="generator">
-                <div class="content">
-                    DVARE 2016
+                <div id="generator">
+                    <div class="content">
+                        DVARE 2016
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="./vendor/jquery.min.js"></script>
-<script src="./vendor/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css"
+            defer="defer"></script>
+    <!--<script src="/vendor/prettify/prettify.js"></script>-->
 </body>
 </html>
