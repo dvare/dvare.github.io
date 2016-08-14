@@ -6,12 +6,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/style.css" rel="stylesheet" media="screen, print">
+    <link href="css/bootstrap-toc.css" rel="stylesheet"/>
 
     <link href="img/favicon.ico" rel="icon" type="image/x-icon">
 </head>
-<body>
+<body data-offset="100" data-spy="scroll" data-target="#toc" >
 
-<div class="container-fluid" data-offset="0" data-spy="scroll" data-target="#">
+<div class="container-fluid" >
     <div class="row-fluid">
         <style>.forkme {
             position: absolute;
@@ -25,272 +26,400 @@
         </a>
 
         <div id="sidenav" class="span2">
-            <nav id="scrollingNav">
-                <ul class="sidenav nav nav-list">
-                    <li class="nav-fixed nav-header active"><a href="#dvare">DVARE</a></li>
-                    <li class="nav-header"><a href="#dataType">DataTypes</a></li>
-                    <li>
-                        <a href="#dataTypes">DataTypes</a>
-                    </li>
-                    <li class="nav-header"><a href="#validation-operations">Validation
-                        Operations</a>
-                    </li>
-                    <li>
-                        <a href="#equalityOperations">Comparison</a>
-                    </li>
-                    <li>
-                        <a href="#arithmeticOperations">Arithmetic</a>
-                    </li>
-                    <li class="nav-header"><a href="#datacall-operations">Data Operations</a>
-                    </li>
-                    <li>
-                        <a href="#functioncall">Function Call</a>
-                    </li>
-                    <li>
-                        <a href="#serviceCall">Service Call</a>
-                    </li>
-                    <li class="nav-header"><a href="#examples">Example</a>
-                    </li>
-                    <li>
-                        <a href="#datavalidation">Data Validation</a>
-                    </li>
 
-                </ul>
-            </nav>
+
+            <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
+
         </div>
         <div id="content">
-            <div id="project">
-                <div class="pull-left">
-                    <h1>DVARE</h1>
+            <div id="row">
+                <div class="col-lg-12">
+                    <div style="margin-bottom: 10px;background-color: #0088cc;">
+                        <img src="img/logo.png"/></div>
                 </div>
-                <div class="clearfix"></div>
+
             </div>
-            <div id="header">
-                <div id="dvare"><h2 id="welcome">What is DVARE</h2>
-                    <p>DVARE is lightweight rule-based framework build to support to data validation and aggregation.
-                        DARE validation and aggregation provide the engine to run validation constraints and aggregation
-                        rules</p>
-                </div>
-            </div>
+
+
             <div id="sections">
+
+                <div id="header">
+                    <div id="dvare"><h2 id="welcome">What is DVARE</h2>
+                        <p>DVARE is lightweight rule-based framework build to support to data validation and
+                            aggregation.
+                            DARE validation and aggregation provide the engine to run validation constraints and
+                            aggregation
+                            rules</p>
+                    </div>
+                </div>
+
+                <section>
+                    <h2 id="basicRule">Basic Rule</h2>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Basic Rule</div>
+                        <div class="panel-body">
+<pre class="prettyprint">
+<code class="language-java">
+@Rule(name = "basicRule", priority = 0)
+public class BasicRule {
+    private Integer age;
+    @Condition
+    public boolean condition() {
+        return age > 20 && age < 30;
+    }
+    @Success
+    public void success() {
+        System.out.println("Rule Successfully Run");
+    }
+}
+</code>
+</pre>
+
+                            <pre class="prettyprint">
+<code class="language-java">
+public class BasicTest extends TestCase {
+    @Test
+    public void testApp() throws IllegalRuleException {
+
+        RuleEngine ruleEngine = new RuleEngine();
+        BasicRule basicRule = new BasicRule();
+        basicRule.setAge(25);
+        ruleEngine.registerRule(basicRule);
+        ruleEngine.fireRules();
+        }
+}
+</code>
+</pre>
+                        </div>
+                    </div>
+
+                </section>
+                <section id="dvareRule">
+                    <h2>Dvare Based Rule</h2>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Dvare Based Rule</div>
+                        <div class="panel-body">
+<pre class="prettyprint">
+<code class="language-java">
+@Rule(name = "dvareRule", priority = 0)
+public class DvareBasedRule {
+
+    private Integer age;
+
+    @Condition
+    public boolean condition() {
+        RuleConfiguration configuration = new RuleConfiguration();
+        TextRuleEngine textRuleEngine = new TextRuleEngine(configuration);
+
+        TypeBinding typeBinding = new TypeBinding();
+        typeBinding.addTypes("age", "IntegerType");
+
+        DataRow dataRow = new DataRow();
+        dataRow.addData("age", age);
+
+        boolean result = false;
+
+        String rule = "age > 20 And age < 30";
+
+        try {
+            result = textRuleEngine.evaluate(rule, typeBinding, dataRow);
+        } catch (ExpressionParseException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    @Condition
+    public boolean condition2() {
+        RuleConfiguration configuration = new RuleConfiguration();
+        TextRuleEngine textRuleEngine = new TextRuleEngine(configuration);
+
+        TypeBinding typeBinding = new TypeBinding();
+        typeBinding.addTypes("age", "IntegerType");
+
+        DataRow dataRow = new DataRow();
+        dataRow.addData("age", age);
+
+        boolean result = false;
+
+        URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvare");
+        File rule = new File(url.getFile());
+
+        try {
+            result = textRuleEngine.evaluate(rule, typeBinding, dataRow);
+        } catch (ExpressionParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Success
+    public void success() {
+        System.out.println("Rule Successfully Run");
+    }
+
+    @Fail
+    public void fail() {
+        System.out.println("Rule Failed");
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+}
+</code>
+</pre>
+
+                            <pre class="prettyprint">
+<code class="language-java">
+public class DvareBasedRuleTest extends TestCase {
+    @Test
+    public void testApp() throws IllegalRuleException {
+
+        RuleEngine ruleEngine = new RuleEngine();
+        DvareBasedRule dvareRule = new DvareBasedRule();
+        dvareRule.setAge(25);
+        ruleEngine.registerRule(dvareRule);
+
+        DvareBasedRule dvareRule2 = new DvareBasedRule();
+        dvareRule2.setAge(35);
+        ruleEngine.registerRule(dvareRule2);
+
+        ruleEngine.fireRules();
+
+    }
+}
+</code>
+</pre>
+                        </div>
+                    </div>
+                </section>
 
                 <section id="dataTypes">
                     <h2>Data Types</h2>
-                    <ul class="nav nav-tabs nav-tabs-examples">
-                        <li class="active">
-                            <a>Data Types</a>
-                        </li>
-                    </ul>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Data Type</th>
-                            <th>Type</th>
-                            <th>List Type</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>String</td>
-                            <td>'A'</td>
-                            <td>{'A','B'}</td>
-                        </tr>
-                        <tr>
-                            <td>Integer</td>
-                            <td>4</td>
-                            <td>{2,5}</td>
-                        </tr>
-                        <tr>
-                            <td>Float</td>
-                            <td>4.2</td>
-                            <td>{3.1,5.5}</td>
-                        </tr>
-                        <tr>
-                            <td>Boolean</td>
-                            <td>true,false</td>
-                            <td>{true,false}</td>
-                        </tr>
-                        <tr>
-                            <td>Regex</td>
-                            <td>R'*'</td>
-                            <td>[R'*',R'*']</td>
-                        </tr>
-                        <tr>
-                            <td>Date</td>
-                            <td>[15-01-12016]</td>
-                            <td>{[15-01-2016],[20-02-2016]}</td>
-                        </tr>
-                        <tr>
-                            <td>DateTime</td>
-                            <td>[15-01-12016-10:20:56]</td>
-                            <td>{[15-01-12016-15:20:56],[20-02-12016-23:20:56]}</td>
-                        </tr>
-                        </tr>
-                        </tbody>
-                    </table>
 
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Data Types</div>
+                        <div class="panel-body">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Data Type</th>
+                                    <th>Type</th>
+                                    <th>List Type</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>String</td>
+                                    <td>'A'</td>
+                                    <td>{'A','B'}</td>
+                                </tr>
+                                <tr>
+                                    <td>Integer</td>
+                                    <td>4</td>
+                                    <td>{2,5}</td>
+                                </tr>
+                                <tr>
+                                    <td>Float</td>
+                                    <td>4.2</td>
+                                    <td>{3.1,5.5}</td>
+                                </tr>
+                                <tr>
+                                    <td>Boolean</td>
+                                    <td>true,false</td>
+                                    <td>{true,false}</td>
+                                </tr>
+                                <tr>
+                                    <td>Regex</td>
+                                    <td>R'*'</td>
+                                    <td>[R'*',R'*']</td>
+                                </tr>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>[15-01-12016]</td>
+                                    <td>{[15-01-2016],[20-02-2016]}</td>
+                                </tr>
+                                <tr>
+                                    <td>DateTime</td>
+                                    <td>[15-01-12016-10:20:56]</td>
+                                    <td>{[15-01-12016-15:20:56],[20-02-12016-23:20:56]}</td>
+                                </tr>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
 
                 <section id="validation-operations">
                     <h2>Validation Operations</h2>
                     <p></p>
                     <div id="equalityOperations">
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                            <li class="active">
-                                <a>Comparison Operations</a>
-                            </li>
-
-                        </ul>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th> Operation Name</th>
-                                <th> Syntax</th>
-                                <th> DataTypes</th>
-                                <th> Operand</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td> EQUAL</td>
-                                <td> eq, =</td>
-                                <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> NOT EQUAL</td>
-                                <td> ne, !=, <></td>
-                                <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> LESS</td>
-                                <td> lt, <</td>
-                                <td> Integer, Float, String, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> LESS EQUAL</td>
-                                <td> le, <=</td>
-                                <td> Integer, Float, String, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> GERATER</td>
-                                <td> gt, ></td>
-                                <td> Integer, Float, String, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> GERATER EQUAL</td>
-                                <td> ge, >=</td>
-                                <td> Integer, Float, String, Date, DateTime</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> INL</td>
-                                <td> IN,In ,in</td>
-                                <td> Integer, Float, String, Boolean,Regex, Date, DateTime</td>
-                                <td> List Type</td>
-                            </tr>
-                            <tr>
-                                <td> BETWEENL</td>
-                                <td> Between, between</td>
-                                <td> Integer, Float, Date, DateTime</td>
-                                <td> List [size=2]</td>
-                            </tr>
-                            <tr>
-                                <td> AND</td>
-                                <td> AND, And, and</td>
-                                <td> Boolean</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> OR</td>
-                                <td> OR, Or, or</td>
-                                <td> Boolean</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> IMPLIES</td>
-                                <td> Implies, implies, =></td>
-                                <td> Boolean</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> NOT</td>
-                                <td> NOT, Not, not</td>
-                                <td> Boolean</td>
-                                <td> Single Type</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Comparison Operations</div>
+                            <div class="panel-body">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th> Operation Name</th>
+                                        <th> Syntax</th>
+                                        <th> DataTypes</th>
+                                        <th> Operand</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td> EQUAL</td>
+                                        <td> eq, =</td>
+                                        <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> NOT EQUAL</td>
+                                        <td> ne, !=, <></td>
+                                        <td> Integer, Float, String, Boolean, Regex, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> LESS</td>
+                                        <td> lt, <</td>
+                                        <td> Integer, Float, String, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> LESS EQUAL</td>
+                                        <td> le, <=</td>
+                                        <td> Integer, Float, String, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> GERATER</td>
+                                        <td> gt, ></td>
+                                        <td> Integer, Float, String, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> GERATER EQUAL</td>
+                                        <td> ge, >=</td>
+                                        <td> Integer, Float, String, Date, DateTime</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> INL</td>
+                                        <td> IN,In ,in</td>
+                                        <td> Integer, Float, String, Boolean,Regex, Date, DateTime</td>
+                                        <td> List Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> BETWEENL</td>
+                                        <td> Between, between</td>
+                                        <td> Integer, Float, Date, DateTime</td>
+                                        <td> List [size=2]</td>
+                                    </tr>
+                                    <tr>
+                                        <td> AND</td>
+                                        <td> AND, And, and</td>
+                                        <td> Boolean</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> OR</td>
+                                        <td> OR, Or, or</td>
+                                        <td> Boolean</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> IMPLIES</td>
+                                        <td> Implies, implies, =></td>
+                                        <td> Boolean</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> NOT</td>
+                                        <td> NOT, Not, not</td>
+                                        <td> Boolean</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <br/>
                     <div id="arithmeticOperations">
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                            <li class="active">
-                                <a>Arithmetic Operations</a>
-                            </li>
-                        </ul>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th> Operation Name</th>
-                                <th> Syntax</th>
-                                <th> DataTypes</th>
-                                <th> Operand</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td> Sum</td>
-                                <td> sum, +</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Subtract</td>
-                                <td> sub, -<></td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Multiple</td>
-                                <td> mul, *</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Divide</td>
-                                <td> div, /</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Pow</td>
-                                <td> pow, ^</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Minimum</td>
-                                <td> min</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
-                            <tr>
-                                <td> Maximum</td>
-                                <td> max</td>
-                                <td> Integer, Float</td>
-                                <td> Single Type</td>
-                            </tr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Arithmetic Operations</div>
+                            <div class="panel-body">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th> Operation Name</th>
+                                        <th> Syntax</th>
+                                        <th> DataTypes</th>
+                                        <th> Operand</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td> Sum</td>
+                                        <td> sum, +</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Subtract</td>
+                                        <td> sub, -<></td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Multiple</td>
+                                        <td> mul, *</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Divide</td>
+                                        <td> div, /</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Pow</td>
+                                        <td> pow, ^</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Minimum</td>
+                                        <td> min</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
+                                    <tr>
+                                        <td> Maximum</td>
+                                        <td> max</td>
+                                        <td> Integer, Float</td>
+                                        <td> Single Type</td>
+                                    </tr>
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
 
 
+                            </div>
+                        </div>
                     </div>
 
                 </section>
@@ -298,123 +427,98 @@
                 <section id="datacall-operations">
                     <h2>Data Operations</h2>
                     <div id="functioncall">
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                            <li class="active">
-                                <a>Function Call</a>
-                            </li>
-                        </ul>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th> Operation Name</th>
-                                <th> Syntax</th>
-                                <th> DataTypes</th>
-                                <th> Operand</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td> Function Call</td>
-                                <td> fun ( name , argements)</td>
-                                <td> Literal, Integer, Float, String, Boolean, Regex, Date, DateTime</td>
-                                <td> Single or List</td>
-                            </tr>
-                            <tr>
 
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Function Call</div>
+                            <div class="panel-body">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th> Operation Name</th>
+                                        <th> Syntax</th>
+                                        <th> DataTypes</th>
+                                        <th> Operand</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td> Function Call</td>
+                                        <td> fun ( name , argements)</td>
+                                        <td> Literal, Integer, Float, String, Boolean, Regex, Date, DateTime</td>
+                                        <td> Single or List</td>
+                                    </tr>
+                                    <tr>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 <section id="examples">
                     <h2>Examples</h2>
-                    <div id="datavalidation">
 
-                        <pre class="prettyprint">
-                            <code class="language-java">
-package com.dvare;
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Dvare Example</div>
+                        <div class="panel-body">
+<pre class="prettyprint">
+<code class="language-java">
+public class DvareRuleTest extends TestCase {
 
-import com.dvare.binding.data.DataRow;
-import com.dvare.binding.data.DataSet;
-import com.dvare.binding.function.FunctionBinding;
-import com.dvare.binding.validation.ValidationResult;
-import com.dvare.binding.validation.ValidationRuleResult;
-import com.dvare.config.RuleConfiguration;
-import com.dvare.exceptions.ExpressionParseException;
-import com.dvare.expression.Expression;
-import com.dvare.expression.datatype.IntegerType;
-import com.dvare.binding.rule.Rule;
-import com.dvare.binding.rule.RuleRegistry;
-import com.dvare.evaluator.RuleEvaluator;
+    @Test
+    public void testApp() throws ExpressionParseException {
+        RuleConfiguration factory = new RuleConfiguration(new String[]{"com.dvare.function"});
 
-import java.util.HashMap;
-import java.util.Map;
+        TypeBinding typeBinding = new TypeBinding();
+        typeBinding.addTypes("Variable0", "IntegerType");
+        typeBinding.addTypes("Variable1", "StringType");
+        typeBinding.addTypes("Variable2", "IntegerType");
+        typeBinding.addTypes("Variable3", "FloatType");
+        typeBinding.addTypes("Variable4", "BooleanType");
+        typeBinding.addTypes("Variable5", "DateType");
+        typeBinding.addTypes("Variable6", "DateTimeType");
+        typeBinding.addTypes("Variable7", "RegexType");
 
-public class MyApp {
+        String exp = "Variable2 = (1 + 2) " +
+                " And Variable0 <= fun( testFunction , 10 ) " +
+                " And Variable1 in ['A','B'] " +
+                " And Variable2 between [2,4]" +
+                " And Variable3 > 3.0 " +
+                " And Variable4 = false " +
+                " And Variable5 in [12-05-2016,13-05-2016] " +
+                " And Variable6 in [12-05-2016-15:30:00,13-05-2016-15:30:00] " +
+                " And Variable7 in [R'B1.*',R'A1.*'] ";
 
-    public static void main(String[] args) throws ExpressionParseException, ClassNotFoundException {
-       RuleConfiguration factory = new RuleConfiguration();
-        String _package = "com.dvare";
-        String _class = "MyApp";
-        Class tableClass = Class.forName(_package + "." + _class);
-        FunctionBinding tableBinding = new FunctionBinding("testFunction", tableClass, new IntegerType());
-        factory.registerFunction(tableBinding);
+        Expression expression = factory.getParser().fromString(exp, typeBinding);
+        Rule rule = new com.dvare.binding.rule.Rule(expression);
 
-        Map<String, String> types = new HashMap<>();
-        types.put("V0", "IntegerType");
-        types.put("V1", "StringType");
-        types.put("V2", "IntegerType");
-        types.put("V3", "FloatType");
-        types.put("V4", "BooleanType");
-        types.put("V5", "DateType");
-        types.put("V6", "DateTimeType");
-        types.put("V7", "RegexType");
-
-        String exp = "V2 = (1 + 2) " +
-                " And V0 <= fun( testFunction , 10 ) " +
-                " And V1 in ['A','B'] " +
-                " And V2 between [2,4]" +
-                " And V3 > 3.0 " +
-                " And V4 = false " +
-                " And V5 in [12-05-2016,13-05-2016] " +
-                " And V6 in [12-05-2016-15:30:00,13-05-2016-15:30:00] " +
-                " And V7 in [R'B1.*',R'A1.*'] ";
-
-        Expression expression = factory.getParser().fromString(exp, types);
-        Rule rule = new Rule(expression);
-        RuleRegistry rules = new RuleRegistry(rule);
-
-        Map<String, Object> dataRow = new HashMap<>();
-        dataRow.put("V0", "10");
-        dataRow.put("V1", "'A'");
-        dataRow.put("V2", "3");
-        dataRow.put("V3", "3.2");
-        dataRow.put("V4", "false");
-        dataRow.put("V5", "12-05-2016");
-        dataRow.put("V6", "12-05-2016-15:30:00");
-        dataRow.put("V7", "A1B2");
-
-        DataSet dataSet = new DataSet();
-        dataSet.addRow(new DataRow(dataRow));
+        DataRow dataRow = new DataRow();
+        dataRow.addData("Variable0", 10);
+        dataRow.addData("Variable1", "'A'");
+        dataRow.addData("Variable2", 3);
+        dataRow.addData("Variable3", 3.2);
+        dataRow.addData("Variable4", false);
+        dataRow.addData("Variable5", "12-05-2016");
+        dataRow.addData("Variable6", "12-05-2016-15:30:00");
+        dataRow.addData("Variable7", "'A1B2'");
 
         RuleEvaluator evaluator = factory.getEvaluator();
-        ValidationResult results = evaluator.evaluate(rules, dataSet);
+        ValidationRuleResult ruleResult = evaluator.evaluate(rule, dataRow);
 
-        for (ValidationRuleResult ruleResult : results.getResults()) {
-            boolean result = !ruleResult.isError();
-            System.out.println("ValidationResult : " + result);
-        }
+        boolean result = ruleResult.isError();
+
+        assertFalse(result);
+
     }
-
-    public Integer testFunction(Integer veriable) {
-        System.out.println("inside testFunction with argument literal: " + veriable);
-        return veriable;
-    }
-
 }
-                            </code>
-                        </pre>
+
+</code>
+</pre>
+
+                        </div>
                     </div>
+
                 </section>
                 <div id="footer">
                     <div id="api-_footer">
@@ -430,11 +534,14 @@ public class MyApp {
             </div>
         </div>
     </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/bootstrap-toc.js"></script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css"
+        defer="defer"></script>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css"
-            defer="defer"></script>
 </body>
 </html>
