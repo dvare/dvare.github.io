@@ -36,11 +36,13 @@
             <div id="sections">
 
                 <div>
-                    <h2 id="whatisrules">What is DVARE RULE</h2>
-                    <p>DVARE RULES is lightweight business rule engine which provides an interface for embedding POJO
-                        rules in your application.
-                        You can turn your POJOs into business rules with a couple of intuitive annotations and you can
-                        evaluate both text and java based rules. </p>
+                    <h2 id="whatisrules">What is DVARE </h2>
+                    <p><strong>DVARE</strong> is lightweight expression evaluator for Java, that allows evaluating
+                        Arithmetic and boolean Comparison expression.</p>
+                    <p><strong>DVARE RULES</strong> is business rule engine built DVARE Framework on which provides an
+                        interface for embedding POJO rules in your application. You can turn your POJOs into business
+                        rules with a couple of intuitive annotations and you can evaluate both text and java based
+                        rules.</p>
 
                 </div>
 
@@ -53,18 +55,20 @@
                         <div class="panel-body">
                             <div>
                                 <h4>Repository</h4>
- <pre><code class="language-xml" data-lang="xml"><span class="repo">&lt;repository&gt;</span>
+                                <pre><code class="language-xml" data-lang="xml"><span
+                                        class="repo">&lt;repository&gt;</span>
 <span class="repo">&lt;id&gt;</span>davre<span class="repo">&lt;/id&gt;</span>
 <span class="repo">&lt;url&gt;</span>https://raw.githubusercontent.com/dvare/release/master/<span class="repo">&lt;/url&gt;</span>
 <span class="repo">&lt;/repository&gt;</span> </code></pre>
                             </div>
                             <div>
                                 <h4>Dependencies</h4>
-<pre><code class="language-xml" data-lang="xml"><span class="repo">&lt;dependencies&gt;</span>
+                                <pre><code class="language-xml" data-lang="xml"><span
+                                        class="repo">&lt;dependencies&gt;</span>
 <span class="repo">&lt;dependency&gt;</span>
     <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
     <span class="repo">&lt;artifactId&gt;</span>core<span class="repo">&lt;/artifactId&gt;</span>
-    <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.1<span class="repo">&lt;/version&gt;</span>
 <span class="repo">&lt;/dependency&gt;</span>
     <span class="repo">&lt;dependency&gt;</span>
     <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
@@ -77,6 +81,19 @@
                     </div>
                 </section>
 
+                <section>
+                    <h2 id="configuration">Configuration</h2>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">RuleEngine Configuration</div>
+                        <div class="panel-body">
+<pre class="prettyprint"><code class="language-java">RuleConfiguration configuration = new RuleConfiguration();
+DVAREEngine dvareEngine = new DVAREEngine(configuration);
+RuleEngine ruleEngine = new RuleEngine(dvareEngine);</code></pre>
+                        </div>
+                    </div>
+                </section>
+
 
                 <section>
                     <h2 id="basicRule">Basic Rule</h2>
@@ -84,38 +101,51 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Basic Rule</div>
                         <div class="panel-body">
-<pre class="prettyprint">
-<code class="language-java">
-@Rule(name = "basicRule", priority = 0)
+                            Rule
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
 public class BasicRule {
+
     private Integer age;
-    @Condition
+    @Condition(type = ConditionType.CODE)
     public boolean condition() {
+
         return age > 20 && age < 30;
     }
+
     @Success
     public void success() {
         System.out.println("Rule Successfully Run");
     }
-}
-</code>
-</pre>
 
-                            <pre class="prettyprint">
-<code class="language-java">
-public class BasicTest extends TestCase {
+    @Fail
+    public void fail() {
+        System.out.println("Rule Failed");
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+}</code></pre>
+                            Test
+                            <pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleConfiguration configuration = new RuleConfiguration();
+        DVAREEngine dvareEngine = new DVAREEngine(configuration);
+        RuleEngine ruleEngine = new RuleEngine(dvareEngine);
+
         BasicRule basicRule = new BasicRule();
         basicRule.setAge(25);
         ruleEngine.registerRule(basicRule);
         ruleEngine.fireRules();
-        }
-}
-</code>
-</pre>
+
+    }
+</code></pre>
                         </div>
                     </div>
 
@@ -126,17 +156,16 @@ public class BasicTest extends TestCase {
                     <div class="panel panel-default">
                         <div class="panel-heading">Dvare Based Rule</div>
                         <div class="panel-body">
-<pre class="prettyprint">
-<code class="language-java">
-@Rule(name = "dvareRule", priority = 0)
+                            Rule
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "dvareRule", priority = 0)
 public class DvareBasedRule {
 
     private Integer age;
+    private String rule;
+    private File fileRule;
 
-    @Condition
-    public boolean condition() {
-        RuleConfiguration configuration = new RuleConfiguration();
-        TextRuleEngine textRuleEngine = new TextRuleEngine(configuration);
+    @Condition(type = ConditionType.CODE)
+    public boolean condition(DVAREEngine dvareEngine) {
 
         TypeBinding typeBinding = new TypeBinding();
         typeBinding.addTypes("age", "IntegerType");
@@ -146,10 +175,8 @@ public class DvareBasedRule {
 
         boolean result = false;
 
-        String rule = "age > 20 And age < 30";
-
         try {
-            result = textRuleEngine.evaluate(rule, typeBinding, dataRow);
+            result = dvareEngine.evaluate(rule, typeBinding, dataRow);
         } catch (ExpressionParseException e) {
             e.printStackTrace();
         }
@@ -158,10 +185,9 @@ public class DvareBasedRule {
     }
 
 
-    @Condition
-    public boolean condition2() {
-        RuleConfiguration configuration = new RuleConfiguration();
-        TextRuleEngine textRuleEngine = new TextRuleEngine(configuration);
+    @Condition(type = ConditionType.CODE)
+    public boolean condition2(DVAREEngine dvareEngine) {
+
 
         TypeBinding typeBinding = new TypeBinding();
         typeBinding.addTypes("age", "IntegerType");
@@ -171,11 +197,8 @@ public class DvareBasedRule {
 
         boolean result = false;
 
-        URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvare");
-        File rule = new File(url.getFile());
-
         try {
-            result = textRuleEngine.evaluate(rule, typeBinding, dataRow);
+            result = dvareEngine.evaluate(fileRule, typeBinding, dataRow);
         } catch (ExpressionParseException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -201,31 +224,52 @@ public class DvareBasedRule {
     public void setAge(Integer age) {
         this.age = age;
     }
-}
-</code>
-</pre>
 
-                            <pre class="prettyprint">
-<code class="language-java">
-public class DvareBasedRuleTest extends TestCase {
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
+
+    public File getFileRule() {
+        return fileRule;
+    }
+
+    public void setFileRule(File fileRule) {
+        this.fileRule = fileRule;
+    }
+}
+</code></pre>
+                            Test
+                            <pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
-        RuleEngine ruleEngine = new RuleEngine();
+        RuleConfiguration configuration = new RuleConfiguration();
+        DVAREEngine dvareEngine = new DVAREEngine(configuration);
+        RuleEngine ruleEngine = new RuleEngine(dvareEngine);
+
+
         DvareBasedRule dvareRule = new DvareBasedRule();
         dvareRule.setAge(25);
+        dvareRule.setRule("age > 20 And age < 30");
+        URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvr");
+        dvareRule.setFileRule(new File(url.getFile()));
         ruleEngine.registerRule(dvareRule);
 
         DvareBasedRule dvareRule2 = new DvareBasedRule();
         dvareRule2.setAge(35);
+        dvareRule2.setRule("age > 30 And age < 40");
+        URL url2 = this.getClass().getClassLoader().getResource("rules/age_rule2.dvr");
+        dvareRule2.setFileRule(new File(url2.getFile()));
         ruleEngine.registerRule(dvareRule2);
-
         ruleEngine.fireRules();
 
     }
 }
-</code>
-</pre>
+</code></pre>
                         </div>
                     </div>
                 </section>
@@ -482,15 +526,12 @@ public class DvareBasedRuleTest extends TestCase {
                     </div>
                 </section>
                 <section id="examples">
-                    <h2>Examples</h2>
+                    <h2>Dvare Example</h2>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">Dvare Example</div>
                         <div class="panel-body">
-<pre class="prettyprint">
-<code class="language-java">
-public class DvareRuleTest extends TestCase {
-
+<pre class="prettyprint"><code class="language-java">public class DvareRuleTest extends TestCase {
     @Test
     public void testApp() throws ExpressionParseException {
         RuleConfiguration factory = new RuleConfiguration(new String[]{"com.dvare.function"});
@@ -536,10 +577,17 @@ public class DvareRuleTest extends TestCase {
         assertFalse(result);
 
     }
+}</code></pre>
+                            <pre class="prettyprint"><code class="language-java">package com.dvare.function;
+@FunctionService
+public class TestFunction {
+    @FunctionMethod(returnType = DataType.IntegerType, list = false, parameters = {DataType.IntegerType})
+    public Integer testFunction(Integer veriable) {
+        System.out.println("inside testFunction with argument value: " + veriable);
+        return veriable;
+    }
 }
-
-</code>
-</pre>
+</code></pre>
 
                         </div>
                     </div>
