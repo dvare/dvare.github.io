@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
 
-        <a href="https://github.com/DVARE/DVARE#fork-destination-box">
+        <a href="https://github.com/dvare/rules#fork-destination-box">
             <img class="forkme" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
                  alt="Fork me on GitHub">
         </a>
@@ -38,8 +38,7 @@
                 <div>
                     <h2 id="whatisrules">What is DVARE </h2>
                     <p><strong>DVARE</strong> is lightweight expression evaluator for Java, that allows evaluating
-                        Arithmetic and boolean Comparison expression.</p>
-                    <p><strong>DVARE RULES</strong> is business rule engine built DVARE Framework on which provides an
+                        Arithmetic and boolean Comparison expression and <strong>DVARE RULES</strong> is business rule engine built DVARE Framework on which provides an
                         interface for embedding POJO rules in your application. You can turn your POJOs into business
                         rules with a couple of intuitive annotations and you can evaluate both text and java based
                         rules.</p>
@@ -57,25 +56,17 @@
                                 <h4>Repository</h4>
                                 <pre><code class="language-xml" data-lang="xml"><span
                                         class="repo">&lt;repository&gt;</span>
-<span class="repo">&lt;id&gt;</span>davre<span class="repo">&lt;/id&gt;</span>
-<span class="repo">&lt;url&gt;</span>https://raw.githubusercontent.com/dvare/release/master/<span class="repo">&lt;/url&gt;</span>
+    <span class="repo">&lt;id&gt;</span>davre<span class="repo">&lt;/id&gt;</span>
+    <span class="repo">&lt;url&gt;</span>https://raw.githubusercontent.com/dvare/release/rules/<span class="repo">&lt;/url&gt;</span>
 <span class="repo">&lt;/repository&gt;</span> </code></pre>
                             </div>
                             <div>
                                 <h4>Dependencies</h4>
-                                <pre><code class="language-xml" data-lang="xml"><span
-                                        class="repo">&lt;dependencies&gt;</span>
-<span class="repo">&lt;dependency&gt;</span>
-    <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
-    <span class="repo">&lt;artifactId&gt;</span>core<span class="repo">&lt;/artifactId&gt;</span>
-    <span class="repo">&lt;version&gt;</span>1.1<span class="repo">&lt;/version&gt;</span>
-<span class="repo">&lt;/dependency&gt;</span>
-    <span class="repo">&lt;dependency&gt;</span>
+                                <pre><code class="language-xml" data-lang="xml"><span class="repo">&lt;dependency&gt;</span>
     <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
     <span class="repo">&lt;artifactId&gt;</span>rules<span class="repo">&lt;/artifactId&gt;</span>
     <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
-<span class="repo">&lt;/dependency&gt;</span>
-<span class="repo">&lt;/dependencies&gt;</span> </code></pre>
+<span class="repo">&lt;/dependency&gt;</span></code></pre>
                             </div>
                         </div>
                     </div>
@@ -102,9 +93,9 @@ RuleEngine ruleEngine = new RuleEngine(dvareEngine);</code></pre>
                         <div class="panel-heading">Basic Rule</div>
                         <div class="panel-body">
                             Rule
-                            <pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
+<pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
 public class BasicRule {
-
+    Logger logger = Logger.getLogger(BasicRule.class);
     private Integer age;
     @Condition(type = ConditionType.CODE)
     public boolean condition() {
@@ -114,12 +105,12 @@ public class BasicRule {
 
     @Success
     public void success() {
-        System.out.println("Rule Successfully Run");
+        logger.info("Rule Successfully Run");
     }
 
     @Fail
     public void fail() {
-        System.out.println("Rule Failed");
+        logger.error("Rule Failed");
     }
 
     public Integer getAge() {
@@ -131,7 +122,7 @@ public class BasicRule {
     }
 }</code></pre>
                             Test
-                            <pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
+<pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
@@ -159,91 +150,62 @@ public class BasicRule {
                             Rule
                             <pre class="prettyprint"><code class="language-java">@Rule(name = "dvareRule", priority = 0)
 public class DvareBasedRule {
-
-    private Integer age;
+    Logger logger = Logger.getLogger(DvareBasedRule.class);
     private String rule;
     private File fileRule;
+    private Person person;
 
     @Condition(type = ConditionType.CODE)
     public boolean condition(DVAREEngine dvareEngine) {
-
-        TypeBinding typeBinding = new TypeBinding();
-        typeBinding.addTypes("age", "IntegerType");
-
-        DataRow dataRow = new DataRow();
-        dataRow.addData("age", age);
-
-        boolean result = false;
-
         try {
-            result = dvareEngine.evaluate(rule, typeBinding, dataRow);
-        } catch (ExpressionParseException e) {
+            return dvareEngine.evaluate(rule, Person.class, person);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return result;
+        return false;
     }
-
 
     @Condition(type = ConditionType.CODE)
     public boolean condition2(DVAREEngine dvareEngine) {
-
-
-        TypeBinding typeBinding = new TypeBinding();
-        typeBinding.addTypes("age", "IntegerType");
-
-        DataRow dataRow = new DataRow();
-        dataRow.addData("age", age);
-
-        boolean result = false;
-
         try {
-            result = dvareEngine.evaluate(fileRule, typeBinding, dataRow);
-        } catch (ExpressionParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            return dvareEngine.evaluate(fileRule, Person.class, person);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return false;
     }
 
+    @Before
+    public void beforeAction() {
+        logger.info("Before Rule Running");
+    }
     @Success
     public void success() {
-        System.out.println("Rule Successfully Run");
+        logger.info("Rule Successfully Run");
     }
-
     @Fail
     public void fail() {
-        System.out.println("Rule Failed");
+        logger.error("Rule Failed");
     }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getRule() {
-        return rule;
+    @After
+    public void afterAction() {
+        logger.info("After Rule Running");
     }
 
     public void setRule(String rule) {
         this.rule = rule;
     }
 
-    public File getFileRule() {
-        return fileRule;
-    }
-
     public void setFileRule(File fileRule) {
         this.fileRule = fileRule;
     }
-}
-</code></pre>
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+}</code></pre>
                             Test
-                            <pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
+<pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
@@ -251,25 +213,33 @@ public class DvareBasedRule {
         DVAREEngine dvareEngine = new DVAREEngine(configuration);
         RuleEngine ruleEngine = new RuleEngine(dvareEngine);
 
+        Person male = new Person();
+        male.setAge(25);
+        male.setGender("Male");
+        male.setTitle("Mr");
 
         DvareBasedRule dvareRule = new DvareBasedRule();
-        dvareRule.setAge(25);
-        dvareRule.setRule("age > 20 And age < 30");
+        dvareRule.setPerson(male);
+        dvareRule.setRule("age between [ 20 , 30 ] And title = 'Mr' And gender = 'Male'");
         URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvr");
         dvareRule.setFileRule(new File(url.getFile()));
         ruleEngine.registerRule(dvareRule);
 
+        Person female = new Person();
+        female.setAge(25);
+        female.setGender("Female");
+        female.setTitle("Ms");
+
         DvareBasedRule dvareRule2 = new DvareBasedRule();
-        dvareRule2.setAge(35);
-        dvareRule2.setRule("age > 30 And age < 40");
+        dvareRule2.setPerson(female);
+        dvareRule2.setRule("age between [ 20 , 30 ] And title = 'Ms' And gender = 'Female'");
         URL url2 = this.getClass().getClassLoader().getResource("rules/age_rule2.dvr");
         dvareRule2.setFileRule(new File(url2.getFile()));
         ruleEngine.registerRule(dvareRule2);
         ruleEngine.fireRules();
 
     }
-}
-</code></pre>
+}</code></pre>
                         </div>
                     </div>
                 </section>
@@ -532,19 +502,13 @@ public class DvareBasedRule {
                         <div class="panel-heading">Dvare Example</div>
                         <div class="panel-body">
 <pre class="prettyprint"><code class="language-java">public class DvareRuleTest extends TestCase {
-    @Test
-    public void testApp() throws ExpressionParseException {
-        RuleConfiguration factory = new RuleConfiguration(new String[]{"com.dvare.function"});
+public class DvareRuleTest extends TestCase {
+    SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        TypeBinding typeBinding = new TypeBinding();
-        typeBinding.addTypes("Variable0", "IntegerType");
-        typeBinding.addTypes("Variable1", "StringType");
-        typeBinding.addTypes("Variable2", "IntegerType");
-        typeBinding.addTypes("Variable3", "FloatType");
-        typeBinding.addTypes("Variable4", "BooleanType");
-        typeBinding.addTypes("Variable5", "DateType");
-        typeBinding.addTypes("Variable6", "DateTimeType");
-        typeBinding.addTypes("Variable7", "RegexType");
+    @Test
+    public void testApp() throws ExpressionParseException, InterpretException, ParseException {
+        RuleConfiguration factory = new RuleConfiguration(new String[]{"com.dvare.function"});
 
         String exp = "Variable2 = (1 + 2) " +
                 " And Variable0 <= fun( testFunction , 10 ) " +
@@ -556,26 +520,22 @@ public class DvareBasedRule {
                 " And Variable6 in [12-05-2016-15:30:00,13-05-2016-15:30:00] " +
                 " And Variable7 in [R'B1.*',R'A1.*'] ";
 
-        Expression expression = factory.getParser().fromString(exp, typeBinding);
+        Expression expression = factory.getParser().fromString(exp, EqualOperation.class);
         Rule rule = new com.dvare.binding.rule.Rule(expression);
 
-        DataRow dataRow = new DataRow();
-        dataRow.addData("Variable0", 10);
-        dataRow.addData("Variable1", "'A'");
-        dataRow.addData("Variable2", 3);
-        dataRow.addData("Variable3", 3.2);
-        dataRow.addData("Variable4", false);
-        dataRow.addData("Variable5", "12-05-2016");
-        dataRow.addData("Variable6", "12-05-2016-15:30:00");
-        dataRow.addData("Variable7", "'A1B2'");
+        EqualOperation equalOperation = new EqualOperation();
+        equalOperation.setVariable0(10);
+        equalOperation.setVariable1("A");
+        equalOperation.setVariable2(3);
+        equalOperation.setVariable3(3.2f);
+        equalOperation.setVariable4(false);
+        equalOperation.setVariable5(dateFormat.parse("12-05-2016"));
+        equalOperation.setVariable6(dateTimeFormat.parse("12-05-2016-15:30:00"));
+        equalOperation.setVariable7("A1B2");
 
         RuleEvaluator evaluator = factory.getEvaluator();
-        ValidationRuleResult ruleResult = evaluator.evaluate(rule, dataRow);
-
-        boolean result = ruleResult.isError();
-
-        assertFalse(result);
-
+        boolean result = evaluator.evaluate(rule, equalOperation);
+        assertTrue(result);
     }
 }</code></pre>
                             <pre class="prettyprint"><code class="language-java">package com.dvare.function;
@@ -596,7 +556,7 @@ public class TestFunction {
                 <div id="footer">
                     <div id="api-_footer">
                         <p>Suggestions, contact, support and error reporting on <a
-                                href="https://github.com/dvare/dvare/issues">GitHub</a></p>
+                                href="https://github.com/dvare/rules/issues">GitHub</a></p>
                     </div>
                 </div>
                 <div id="generator">
