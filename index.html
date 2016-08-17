@@ -36,9 +36,12 @@
             <div id="sections">
 
                 <div>
-                    <h2 id="whatisrules">What is DVARE </h2>
-                    <p><strong>DVARE</strong> is lightweight expression evaluator for Java, that allows evaluating
-                        Arithmetic and boolean Comparison expression and <strong>DVARE RULES</strong> is business rule engine built DVARE Framework on which provides an
+                    <h2 id="whatisrules">What is DVARE Framework</h2>
+                    <p><span class="highlight">DVARE</span> is lightweight expression evaluator for Java, that allows
+                        evaluating
+                        Arithmetic and boolean Comparison expression and <span class="highlight">DVARE RULES</span> is
+                        business rule
+                        engine built DVARE Framework on which provides an
                         interface for embedding POJO rules in your application. You can turn your POJOs into business
                         rules with a couple of intuitive annotations and you can evaluate both text and java based
                         rules.</p>
@@ -62,7 +65,8 @@
                             </div>
                             <div>
                                 <h4>Dependencies</h4>
-                                <pre><code class="language-xml" data-lang="xml"><span class="repo">&lt;dependency&gt;</span>
+                                <pre><code class="language-xml" data-lang="xml"><span
+                                        class="repo">&lt;dependency&gt;</span>
     <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
     <span class="repo">&lt;artifactId&gt;</span>rules<span class="repo">&lt;/artifactId&gt;</span>
     <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
@@ -72,28 +76,78 @@
                     </div>
                 </section>
 
+                <!-- Configuration -->
+
+
                 <section>
                     <h2 id="configuration">Configuration</h2>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading">RuleEngine Configuration</div>
+                        <div class="panel-heading">Rule Engine Configuration</div>
                         <div class="panel-body">
 <pre class="prettyprint"><code class="language-java">RuleConfiguration configuration = new RuleConfiguration();
-DVAREEngine dvareEngine = new DVAREEngine(configuration);
-RuleEngine ruleEngine = new RuleEngine(dvareEngine);</code></pre>
+TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
+RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);</code></pre>
                         </div>
                     </div>
                 </section>
 
 
+                <!-- Rule Definition -->
+
+
                 <section>
-                    <h2 id="basicRule">Basic Rule</h2>
+                    <h2 id="ruledefinition">Rule Definition</h2>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Rule Definition</div>
+                        <div class="panel-body">
+                            <p><span class="highlight">DVARE RULES</span> provide a couple of annotations for rule
+                                definition. A <span class="highlight">@Rule</span>
+                                annotation turns simple POJO class into the rule and
+                                <span class="highlight">@Condition</span> use to
+                                specify business Logic.
+                                <span class="highlight">@Condition(type = ConditionType.CODE)</span> also annotation
+                                have attribute name type which help the Rule Engine to differentiate between
+                                <span class="highlight">CODE</span> and <span class="highlight">TEXT</span> rules.
+
+                            <pre class="prettyprint"><code class="language-java">Rule(name = "ruleDefinition", description="Rule for documentation")
+public class RuleDefinition {
+    @Condition(type = ConditionType.CODE)
+    public Boolean condition() {
+        return true;
+    }
+}</code></pre>
+                            <p>To Scheduling the <span class="highlight">Rule</span> in <span class="highlight">Rule Engine</span>
+                                set the priority of Rule by adding the priority
+                                attribute in <span class="highlight">@Rule(priority = 1)</span> and ordered condition in
+                                rule by adding order attribute
+                                in <span class="highlight">@Condition(order = 1)</span> by default rule engine served in
+                                <span class="highlight">FCFS</span>.</p>
+
+                            The method with <span class="highlight">@Success</span> and <span
+                                class="highlight">@Fail</span> annotation run according to the condition
+                            results.
+                            Annotation <span class="highlight">@Before</span> and <span
+                                class="highlight">@After</span>
+                            used to associate and disassociate resources when you have
+                            multiple conditions in a rule.</p>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- Basic Rule Example -->
+
+                <section>
+                    <h2 id="basicRuleExample">Basic Rule Example</h2>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">Basic Rule</div>
                         <div class="panel-body">
                             Rule
-<pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
 public class BasicRule {
     Logger logger = Logger.getLogger(BasicRule.class);
     private Integer age;
@@ -122,7 +176,7 @@ public class BasicRule {
     }
 }</code></pre>
                             Test
-<pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
+                            <pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
@@ -141,11 +195,41 @@ public class BasicRule {
                     </div>
 
                 </section>
-                <section id="dvareRule">
-                    <h2>Dvare Based Rule</h2>
+
+
+                <!-- Rule Definition -->
+
+
+                <section>
+                    <h2 id="dvareRuleRefinition">Textual Rule Definition</h2>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading">Dvare Based Rule</div>
+                        <div class="panel-heading">Textual Rule Definition</div>
+                        <div class="panel-body">
+                            <p>Business Rules is company policies which change with time and If these rules and embedded
+                                is an application change need a new release . To Overcome this problem DARE provides
+                                Textual Expression Evaluator which is Embedded in Rule Engine. These rules are a String
+                                which can be loaded from a file or in the database so that can be easily
+                                changeable. </p>
+                            <p>To add textual expression solver in a rule pass <span
+                                    class="highlight">TextualRuleEngine</span> parameter in condition
+                                method and change Condition type to TEXT <span class="highlight">@Condition(type = ConditionType.DVARE)</span>
+                                annotation.</p>
+                            <pre class="prettyprint"><code class="language-java">@Condition(type = ConditionType.TEXT)
+public boolean condition(TextualRuleEngine textualRuleEngine) {
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- DVARE  Rule Example -->
+
+                <section id="dvareRule">
+                    <h2>Textual Rule Example</h2>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Textual Rule Example</div>
                         <div class="panel-body">
                             Rule
                             <pre class="prettyprint"><code class="language-java">@Rule(name = "dvareRule", priority = 0)
@@ -205,7 +289,7 @@ public class DvareBasedRule {
     }
 }</code></pre>
                             Test
-<pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
+                            <pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
