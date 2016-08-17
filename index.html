@@ -146,14 +146,14 @@ public class RuleDefinition {
                     <div class="panel panel-default">
                         <div class="panel-heading">Basic Rule</div>
                         <div class="panel-body">
-                            Rule
+                            <span class="highlight">Rule Example</span>
                             <pre class="prettyprint"><code class="language-java">@Rule(name = "basicRule", priority = 0)
 public class BasicRule {
     Logger logger = Logger.getLogger(BasicRule.class);
     private Integer age;
+
     @Condition(type = ConditionType.CODE)
     public boolean condition() {
-
         return age > 20 && age < 30;
     }
 
@@ -161,7 +161,6 @@ public class BasicRule {
     public void success() {
         logger.info("Rule Successfully Run");
     }
-
     @Fail
     public void fail() {
         logger.error("Rule Failed");
@@ -175,22 +174,21 @@ public class BasicRule {
         this.age = age;
     }
 }</code></pre>
-                            Test
+                            <span class="highlight">Test Case</span>
                             <pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
         RuleConfiguration configuration = new RuleConfiguration();
-        DVAREEngine dvareEngine = new DVAREEngine(configuration);
-        RuleEngine ruleEngine = new RuleEngine(dvareEngine);
+        TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
+        RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);
 
         BasicRule basicRule = new BasicRule();
         basicRule.setAge(25);
         ruleEngine.registerRule(basicRule);
         ruleEngine.fireRules();
-
     }
-</code></pre>
+}</code></pre>
                         </div>
                     </div>
 
@@ -231,28 +229,37 @@ public boolean condition(TextualRuleEngine textualRuleEngine) {
                     <div class="panel panel-default">
                         <div class="panel-heading">Textual Rule Example</div>
                         <div class="panel-body">
-                            Rule
-                            <pre class="prettyprint"><code class="language-java">@Rule(name = "dvareRule", priority = 0)
-public class DvareBasedRule {
-    Logger logger = Logger.getLogger(DvareBasedRule.class);
+
+                            <span class="highlight"> Rules</span>
+                            <pre class="prettyprint"><code class="language-java">age between [ 19 , 25 ] And group = 'adult' And title = 'Mr' And gender = 'Male'
+age between [ 10 , 18 ] And group = 'teenager' And title = 'Ms' And gender = 'Female'</code></pre>
+
+                            <!-- Rule Example Start-->
+
+                            <span class="highlight">Rule Example</span>
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "textualRule", priority = 0)
+public class TextualRule {
+    Logger logger = Logger.getLogger(TextualRule.class);
     private String rule;
     private File fileRule;
     private Person person;
 
-    @Condition(type = ConditionType.CODE)
-    public boolean condition(DVAREEngine dvareEngine) {
+    @Condition(type = ConditionType.TEXT)
+    public boolean condition(TextualRuleEngine textualRuleEngine) {
+        logger.info("Inside Condition 1");
         try {
-            return dvareEngine.evaluate(rule, Person.class, person);
+            return textualRuleEngine.evaluate(rule, Person.class, person);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    @Condition(type = ConditionType.CODE)
-    public boolean condition2(DVAREEngine dvareEngine) {
+    @Condition(type = ConditionType.TEXT)
+    public boolean condition2(TextualRuleEngine textualRuleEngine) {
+        logger.info("Inside Condition 2");
         try {
-            return dvareEngine.evaluate(fileRule, Person.class, person);
+            return textualRuleEngine.evaluate(fileRule, Person.class, person);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -261,19 +268,22 @@ public class DvareBasedRule {
 
     @Before
     public void beforeAction() {
-        logger.info("Before Rule Running");
+        logger.info("Before Condition");
     }
+
+    @After
+    public void afterAction() {
+        logger.info("After Condition");
+    }
+
     @Success
     public void success() {
         logger.info("Rule Successfully Run");
     }
+
     @Fail
     public void fail() {
         logger.error("Rule Failed");
-    }
-    @After
-    public void afterAction() {
-        logger.info("After Rule Running");
     }
 
     public void setRule(String rule) {
@@ -287,43 +297,65 @@ public class DvareBasedRule {
     public void setPerson(Person person) {
         this.person = person;
     }
-}</code></pre>
-                            Test
-                            <pre class="prettyprint"><code class="language-java">public class DvareBasedRuleTest extends TestCase {
+}
+</code></pre>
+                            <span class="highlight"> Test Case</span>
+                            <pre class="prettyprint"><code class="language-java">public class TextualRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
         RuleConfiguration configuration = new RuleConfiguration();
-        DVAREEngine dvareEngine = new DVAREEngine(configuration);
-        RuleEngine ruleEngine = new RuleEngine(dvareEngine);
+        TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
+        RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);
 
         Person male = new Person();
-        male.setAge(25);
+        male.setAge(23);
+        male.setGroup("adult");
         male.setGender("Male");
         male.setTitle("Mr");
 
-        DvareBasedRule dvareRule = new DvareBasedRule();
-        dvareRule.setPerson(male);
-        dvareRule.setRule("age between [ 20 , 30 ] And title = 'Mr' And gender = 'Male'");
+        TextualRule textualRule = new TextualRule();
+        textualRule.setPerson(male);
+        textualRule.setRule("age between [ 19 , 25 ] And group = 'adult' And title = 'Mr' And gender = 'Male'");
         URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvr");
-        dvareRule.setFileRule(new File(url.getFile()));
-        ruleEngine.registerRule(dvareRule);
+        textualRule.setFileRule(new File(url.getFile()));
+        ruleEngine.registerRule(textualRule);
+
 
         Person female = new Person();
-        female.setAge(25);
+        female.setAge(30);
+        female.setGroup("teenager");
         female.setGender("Female");
         female.setTitle("Ms");
 
-        DvareBasedRule dvareRule2 = new DvareBasedRule();
-        dvareRule2.setPerson(female);
-        dvareRule2.setRule("age between [ 20 , 30 ] And title = 'Ms' And gender = 'Female'");
+        TextualRule textualRule2 = new TextualRule();
+        textualRule2.setPerson(female);
+        textualRule2.setRule("age between [ 10 , 18 ] And group = 'teenager' And title = 'Ms' And gender = 'Female'");
         URL url2 = this.getClass().getClassLoader().getResource("rules/age_rule2.dvr");
-        dvareRule2.setFileRule(new File(url2.getFile()));
-        ruleEngine.registerRule(dvareRule2);
+        textualRule2.setFileRule(new File(url2.getFile()));
+        ruleEngine.registerRule(textualRule2);
         ruleEngine.fireRules();
 
     }
 }</code></pre>
+
+                            <span class="highlight"> Output</span>
+                            <pre ><code class="language-java">INFO  [com.dvare.rule.TextualRule] - Before Condition
+INFO  [com.dvare.rule.TextualRule] - Inside Condition 1
+INFO  [com.dvare.rule.TextualRule] - After Condition
+<span class="highlight">INFO  [com.dvare.rule.TextualRule] - Rule Successfully Run</span>
+INFO  [com.dvare.rule.TextualRule] - Before Condition
+INFO  [com.dvare.rule.TextualRule] - Inside Condition 2
+INFO  [com.dvare.rule.TextualRule] - After Condition
+<span class="highlight">INFO  [com.dvare.rule.TextualRule] - Rule Successfully Run</span>
+INFO  [com.dvare.rule.TextualRule] - Before Condition
+INFO  [com.dvare.rule.TextualRule] - Inside Condition 1
+INFO  [com.dvare.rule.TextualRule] - After Condition
+<span class="highlight-error">ERROR [com.dvare.rule.TextualRule] - Rule Failed</span>
+INFO  [com.dvare.rule.TextualRule] - Before Condition
+INFO  [com.dvare.rule.TextualRule] - Inside Condition 2
+INFO  [com.dvare.rule.TextualRule] - After Condition
+<span class="highlight-error">ERROR [com.dvare.rule.TextualRule] - Rule Failed</span></code></pre>
                         </div>
                     </div>
                 </section>
