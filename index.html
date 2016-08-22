@@ -65,10 +65,15 @@
                             </div>
                             <div>
                                 <h4>Dependencies</h4>
-                                <pre><code class="language-xml" data-lang="xml"><span
-                                        class="repo">&lt;dependency&gt;</span>
+                                <pre><code class="language-xml" data-lang="xml">
+<span class="repo">&lt;dependency&gt;</span>
     <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
-    <span class="repo">&lt;artifactId&gt;</span>rules<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>rules-core<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
+<span class="repo">&lt;/dependency&gt;</span>
+<span class="repo">&lt;dependency&gt;</span>
+    <span class="repo">&lt;groupId&gt;</span>com.dvare<span class="repo">&lt;/groupId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>rules-spring<span class="repo">&lt;/artifactId&gt;</span>
     <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
 <span class="repo">&lt;/dependency&gt;</span></code></pre>
                             </div>
@@ -85,9 +90,51 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Rule Engine Configuration</div>
                         <div class="panel-body">
-<pre class="prettyprint"><code class="language-java">RuleConfiguration configuration = new RuleConfiguration();
-TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
-RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);</code></pre>
+
+                            <!--Basic Rule Engine-->
+
+                            <div><span class="highlight">RuleEngine</span>
+                                <pre class="prettyprint"><code class="language-java">RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+RuleEngine ruleEngine = ruleEngineBuilder.build();</code></pre>
+                            </div>
+
+                            <!--Spring Integration-->
+
+                            <div>
+                                <span class="highlight">Spring Integration</span> <br/>
+
+                                <!-- Configuration File -->
+                                application-context.xml
+                                <pre class="prettyprint"><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+    &lt;bean id="ruleEngine" class="com.dvare.spring.config.RulesEngineFactoryBean"&gt;
+        &lt;property name="satisfyCondition" value="0"/&gt; &lt;!-- 0 for ANY 1 ALL--&gt;
+        &lt;property name="stopOnFail" value="false"/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+                                <!--  Rule Engine -->
+                                Rule Engine
+                                <pre class="prettyprint"><code class="language-java">ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+RuleEngine ruleEngine = context.getBean(RuleEngine.class);</code></pre>
+
+                            </div>
+
+
+                            <!-- PARAMS -->
+                            <div>
+                                <span class="highlight">Rule Engine Parameters</span> <br/>
+                                <ul>
+                                    <li><span class="highlight">satisfyCondition </span>: <span class="highlight">[0]</span> for at least ONE <span class="highlight">[1]</span> for ALL condition inside rule must satisfy.
+                                    </li>
+                                    <li><span class="highlight">stopOnFail</span>: <span class="highlight">[true]</span> Stop rule engine if any rule return false </li>
+                                </ul>
+                            </div>
+
+
                         </div>
                     </div>
                 </section>
@@ -179,9 +226,9 @@ public class BasicRule {
     @Test
     public void testApp() throws IllegalRuleException {
 
-        RuleConfiguration configuration = new RuleConfiguration();
-        TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
-        RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);
+        RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+        ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
 
         BasicRule basicRule = new BasicRule();
         basicRule.setAge(25);
@@ -244,26 +291,16 @@ public class TextualRule {
     private File fileRule;
     private Person person;
 
-    @Condition(type = ConditionType.TEXT)
+    @Condition(type = ConditionType.TEXT, order = 0)
     public boolean condition(TextualRuleEngine textualRuleEngine) {
         logger.info("Inside Condition 1");
-        try {
-            return textualRuleEngine.evaluate(rule, Person.class, person);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return textualRuleEngine.evaluate(rule, Person.class, person);
     }
 
-    @Condition(type = ConditionType.TEXT)
+    @Condition(type = ConditionType.TEXT, order = 1)
     public boolean condition2(TextualRuleEngine textualRuleEngine) {
         logger.info("Inside Condition 2");
-        try {
-            return textualRuleEngine.evaluate(fileRule, Person.class, person);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return textualRuleEngine.evaluate(fileRule, Person.class, person);
     }
 
     @Before
@@ -297,16 +334,15 @@ public class TextualRule {
     public void setPerson(Person person) {
         this.person = person;
     }
-}
-</code></pre>
+}</code></pre>
                             <span class="highlight"> Test Case</span>
                             <pre class="prettyprint"><code class="language-java">public class TextualRuleTest extends TestCase {
     @Test
     public void testApp() throws IllegalRuleException {
 
-        RuleConfiguration configuration = new RuleConfiguration();
-        TextualRuleEngine textualRuleEngine = new TextualRuleEngine(configuration);
-        RuleEngine ruleEngine = new RuleEngine(textualRuleEngine);
+        RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+        ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
 
         Person male = new Person();
         male.setAge(23);
@@ -340,7 +376,7 @@ public class TextualRule {
 }</code></pre>
 
                             <span class="highlight"> Output</span>
-                            <pre ><code class="language-java">INFO  [com.dvare.rule.TextualRule] - Before Condition
+                            <pre><code class="language-java">INFO  [com.dvare.rule.TextualRule] - Before Condition
 INFO  [com.dvare.rule.TextualRule] - Inside Condition 1
 INFO  [com.dvare.rule.TextualRule] - After Condition
 <span class="highlight">INFO  [com.dvare.rule.TextualRule] - Rule Successfully Run</span>
