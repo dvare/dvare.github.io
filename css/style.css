@@ -28,17 +28,15 @@ td.code {
 h1 {
     font-family: "Source Sans Pro Semibold", sans-serif;
     font-weight: normal;
-    font-size: 44px;
-    line-height: 50px;
-    margin: 0 0 10px 0;
+    font-size: 24px;
+    margin: 0;
     padding: 0;
 }
 
 h2 {
     font-family: "Source Sans Pro", sans-serif;
     font-weight: normal;
-    font-size: 24px;
-    line-height: 40px;
+    font-size: 20px;
     margin: 0 0 20px 0;
     padding: 0;
 }
@@ -48,13 +46,19 @@ section {
     padding: 30px 0;
 }
 
+section h1 {
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
 section h2 {
     font-family: "Source Sans Pro", sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 40px;
-    padding-bottom: 14px;
-    margin: 0 0 20px 0;
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
     padding: 0;
 }
 
@@ -65,27 +69,41 @@ article {
 article h1 {
     font-family: "Source Sans Pro Bold", sans-serif;
     font-weight: 600;
-    font-size: 24px;
+    font-size: 28px;
     line-height: 26px;
 }
 
 article h2 {
-    font-family: "Source Sans Pro", sans-serif;
+    font-family: "Source Sans Pro Bold", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 26px;
+}
+
+article h3 {
+    font-family: "Source Sans Pro Bold", sans-serif;
     font-weight: 600;
     font-size: 18px;
+    line-height: 26px;
+}
+
+article h4 {
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
     line-height: 24px;
     margin: 0 0 10px 0;
 }
 
-article h3 {
+article h5 {
     font-family: "Source Sans Pro", sans-serif;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 18px;
     margin: 0 0 10px 0;
 }
 
-article h4 {
+article h6 {
     font-family: "Source Sans Pro", sans-serif;
     font-weight: 600;
     font-size: 14px;
@@ -160,12 +178,12 @@ td {
  * highlight
  * ------------------------------------------------------------------------------------------ */
 .highlight {
-    font-weight: bold;
+   /* font-weight: bold;*/
     color: rgb(51, 122, 183);
 }
 
 .highlight-error {
-    font-weight: bold;
+  /*  font-weight: bold;*/
     color: rgb(183, 19, 21);
 }
 
@@ -179,10 +197,69 @@ pre {
     margin: 10px 0 20px 0;
 }
 
-pre {
+pre code {
     display: block;
     font-size: 14px;
     font-family: "Source Code Pro", monospace;
+    font-style: normal;
+    font-weight: 400;
+    word-wrap: normal;
+    white-space: pre;
+}
+
+pre.language-json {
+    overflow: auto;
+}
+
+pre.language-html {
+    margin: 40px 0 20px 0;
+}
+
+pre.language-html:before {
+    content: attr(data-type);
+    position: absolute;
+    top: -30px;
+    left: 0;
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    background-color: #3387CC;
+    color: #ffffff;
+}
+
+pre.language-html[data-type="get"]:before {
+    background-color: green;
+}
+
+pre.language-html[data-type="put"]:before {
+    background-color: #e5c500;
+}
+
+pre.language-html[data-type="post"]:before {
+    background-color: #4070ec;
+}
+
+pre.language-html[data-type="delete"]:before {
+    background-color: #ed0039;
+}
+
+pre.language-api .str {
+    color: #ffffff;
+}
+
+pre.language-api .pln,
+pre.language-api .pun {
+    color: #65B042;
+}
+
+pre code {
+    display: block;
+    font-size: 14px;
+    font-family: "Source Code Pro";
     font-style: normal;
     font-weight: 400;
     word-wrap: normal;
@@ -458,7 +535,6 @@ ul.nav-tabs {
     a:after {
         content: " [" attr(href) "] ";
     }
-
 
     pre {
         padding: 10px;

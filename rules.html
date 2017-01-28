@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DVARE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="css/style.css" rel="stylesheet" media="screen, print">
+    <link href="css/bootstrap-toc.css" rel="stylesheet"/>
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body data-offset="100" data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class=" col-lg-2 col-sm-3 col-md-3 col-xs-12" id="side-menu">
+
+            <nav id="toc" data-spy="affix" data-toggle="toc" class="side-menu-nav"></nav>
+
+        </div>
+        <div class="col-lg-10 col-sm-9 col-md-9 col-xs-12" id="content">
+            <div id="row">
+                <div class="col-md-12" style="margin-bottom: 10px;background-color: #0088cc;">
+                    <img src="img/logo.png" alt="DVARE" class="logo"/>
+                </div>
+            </div>
+
+            <div id="sections">
+
+                <div>
+                    <h1>What is DVARE RULES</h1>
+                    <p><span class="highlight">DVARE RULES</span>
+                        is business rule engine built <a href="index.html">DVARE Framework</a> on which provides an
+                        interface for embedding POJO rules in your application. You can turn your POJOs into
+                        business rules with a couple of intuitive annotations and you can evaluate
+                        both text and java based rules.</p>
+
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>Usage</h1>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Use with maven</div>
+                    <div class="panel-body">
+                        <div>
+                            <h3>Repository</h3>
+                            <pre><code class="language-xml" data-lang="xml"><span
+                                    class="repo">&lt;repository&gt;</span>
+    <span class="repo">&lt;id&gt;</span>maven-repo<span class="repo">&lt;/id&gt;</span>
+    <span class="repo">&lt;url&gt;</span>http://repo1.maven.org/maven/<span class="repo">&lt;/url&gt;</span>
+<span class="repo">&lt;/repository&gt;</span> </code></pre>
+                        </div>
+
+                        <div>
+                            <h3>Snapshots Repository</h3>
+                            <pre><code class="language-xml" data-lang="xml"><span
+                                    class="repo">&lt;repository&gt;</span>
+    <span class="repo">&lt;id&gt;</span>oss-sonatype<span class="repo">&lt;/id&gt;</span>
+    <span class="repo">&lt;name&gt;</span>oss-sonatype<span class="repo">&lt;/name&gt;</span>
+    <span class="repo">&lt;url&gt;</span>https://oss.sonatype.org/content/repositories/snapshots/<span class="repo">&lt;/url&gt;</span>
+    <span class="repo">&lt;snapshots&gt;</span>
+        <span class="repo">&lt;enabled&gt;</span>true<span class="repo">&lt;/enabled&gt;</span>
+    <span class="repo">&lt;/snapshots&gt;</span>
+<span class="repo">&lt;/repository&gt;</span> </code></pre>
+                        </div>
+                        <div>
+                            <h3>Dependencies</h3>
+                            <pre><code class="language-xml" data-lang="xml">
+<span class="repo">&lt;dependency&gt;</span>
+    <span class="repo">&lt;groupId&gt;</span>org.dvare<span class="repo">&lt;/groupId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>dvare-framework<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.3<span class="repo">&lt;/version&gt;</span>
+<span class="repo">&lt;/dependency&gt;</span>
+       &lt;!-- rules dependency --&gt;
+<span class="repo">&lt;dependency&gt;</span>
+    <span class="repo">&lt;groupId&gt;</span>org.dvare<span class="repo">&lt;/groupId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>rules-core<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
+<span class="repo">&lt;/dependency&gt;</span>
+    &lt;!-- Spring rules dependency --&gt;
+<span class="repo">&lt;dependency&gt;</span>
+    <span class="repo">&lt;groupId&gt;</span>org.dvare<span class="repo">&lt;/groupId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>rules-spring<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.0<span class="repo">&lt;/version&gt;</span>
+<span class="repo">&lt;/dependency&gt;</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+                </section>
+
+                <!-- Configuration -->
+
+
+                <section>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1>Configuration</h1>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Rule Engine Configuration</div>
+                        <div class="panel-body">
+
+                            <!--Basic Rule Engine-->
+
+                            <div><span class="highlight">RuleEngine</span>
+                                <pre class="prettyprint"><code class="language-java">RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+ruleEngineBuilder.functionPackages(new String[]{"org.dvare.function"});
+RuleEngine ruleEngine = ruleEngineBuilder.build();</code></pre>
+                            </div>
+
+                            <!--Spring Integration-->
+
+                            <div>
+                                <span class="highlight">Spring Integration</span> <br/>
+
+                                <!-- Configuration File -->
+                                application-context.xml
+                                <pre class="prettyprint"><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+    &lt;bean id="ruleEngine" class="org.dvare.spring.config.RulesEngineFactoryBean"&gt;
+        &lt;property name="satisfyCondition" value="0"/&gt; &lt;!-- 0 for ANY 1 ALL--&gt;
+        &lt;property name="stopOnFail" value="false"/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+                                <!--  Rule Engine -->
+                                Rule Engine
+                                <pre class="prettyprint"><code class="language-java">ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+RuleEngine ruleEngine = context.getBean(RuleEngine.class);</code></pre>
+
+                            </div>
+
+
+                            <!-- PARAMS -->
+                            <div>
+                                <span class="highlight">Rule Engine Parameters</span> <br/>
+                                <ul>
+                                    <li><span class="highlight">satisfyCondition </span>: <span
+                                            class="highlight">[0]</span> for at least ONE <span
+                                            class="highlight">[1]</span> for ALL condition inside rule must satisfy.
+                                    </li>
+                                    <li><span class="highlight">stopOnFail</span>: <span
+                                            class="highlight">[true]</span>
+                                        Stop rule engine if any rule return false
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+
+
+                <!--Textual Rule Definition-->
+                <section>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1>Textual Rule </h1>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Textual Rule</div>
+                        <div class="panel-body">
+                            <p>Business Rules is company policies which change with time and If these rules and
+                                embedded is an application change need a new release .
+                                To Overcome this problem DARE provides Textual Expression Evaluator
+                                which is Embedded in Rule Engine. These rules are a String
+                                which can be loaded from a file or in the database so that can be easily
+                                changeable. </p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section>
+                    <!-- Rule Definition -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1>Rule Definition</h1>
+                        </div>
+                    </div>
+
+                    <!-- Annotated Rule Definition -->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Annotated Rule Definition</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <p>Dvare rules provide a couple of annotations for rule
+                                definition. A <span class="highlight">@Rule</span>
+                                annotation turns simple POJO class into the rule and
+                                <span class="highlight">@Condition</span> use to
+                                specify business Logic.
+                                <span class="highlight">@Condition(type = ConditionType.CODE)</span> also annotation
+                                have attribute name type which help the Rule Engine to differentiate between
+                                <span class="highlight">CODE</span> and <span class="highlight">TEXT</span> rules.
+                            </p>
+                            <p>To Scheduling the <span class="highlight">Rule</span> in <span
+                                    class="highlight">Rule Engine</span>
+                                set the priority of Rule by adding the priority
+                                attribute in <span class="highlight">@Rule(priority = 1)</span> and ordered
+                                condition in
+                                rule by adding order attribute
+                                in <span class="highlight">@Condition(order = 1)</span> by default rule engine
+                                served in
+                                <span class="highlight">FCFS</span>.</p>
+
+                            The method with <span class="highlight">@Success</span> and <span
+                                class="highlight">@Fail</span> annotation run according to the condition
+                            results.
+                            Annotation <span class="highlight">@Before</span> and <span
+                                class="highlight">@After</span>
+                            used to associate and disassociate resources when you have
+                            multiple conditions in a rule.</p>
+
+                            <br/>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <span class="highlight">Rule Definition</span>
+                                    <pre class="prettyprint"><code class="language-java">Rule(name = "Rule Name", description="Rule Description")
+public class RuleDefinition {
+    @Condition(type = ConditionType.TEXT)
+    public Boolean condition(TextualRuleEngine textualRuleEngine) {
+        return true;
+    }
+}</code></pre>
+                                    <pre class="prettyprint"><code class="language-java">Rule(name = "Rule Name", description="Rule Description")
+public class RuleDefinition {
+    @Condition(type = ConditionType.TEXT)
+    public Boolean condition(TextualRuleEngine textualRuleEngine) {
+        return true;
+    }
+}</code></pre>
+
+                                </div>
+                            </div>
+
+                            <br/>
+
+
+                        </div>
+                    </div>
+
+
+                    <br/>
+
+
+                    <!-- Basic Rule Definition -->
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Basic Rule Definition</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <p>Dvare rules also provides <span class="highlight">BasicRule</span> and <span
+                                    class="highlight">TextualRule</span> for basic and texttual interfaces for rule
+                                definition.
+                            </p>
+
+                            <br/>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <span class="highlight">Basic Rule Definition</span>
+                                    <pre class="prettyprint"><code class="language-java">public class BasicRuleDefinition implements BasicRule {
+    @Override
+    public String getName() {
+        return "basicRule";
+    }
+    @Override
+    public boolean condition() {
+        return false;
+    }
+    @Override
+    public void success() {}
+    @Override
+    public void fail() {}
+}</code></pre>
+                                    <pre class="prettyprint"><code class="language-java">public class TextualRuleExample implements TextualRule {
+    @Override
+    public String getName() {
+    return "basicRule";
+    }
+    @Override
+    public boolean condition(TextualRuleEngine textualRuleEngine) {
+    return false;
+    }
+    @Override
+    public void success() {}
+    @Override
+    public void fail(){}
+}</code></pre>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <!-- Annotated Rule Example -->
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight"> Annotated Rule Examples</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <span class="highlight">Rule</span>
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "annotatedRuleExample", priority = 0)
+public class AnnotatedRuleExample {
+    Logger logger = Logger.getLogger(BasicRule.class);
+    private Integer age;
+
+    @Condition(type = ConditionType.CODE)
+    public boolean condition() {
+        return age > 20 && age < 30;
+    }
+
+    @Success
+    public void success() {
+        logger.info("Rule Successfully Run");
+    }
+    @Fail
+    public void fail() {
+        logger.error("Rule Failed");
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+}</code></pre>
+                            <span class="highlight">Test Case</span>
+                            <pre class="prettyprint"><code class="language-java">public class BasicRuleTest extends TestCase {
+    @Test
+    public void testApp() throws IllegalRuleException {
+
+        RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+        ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
+
+        AnnotatedRuleExample annotatedRuleExample = new AnnotatedRuleExample();
+        annotatedRuleExample.setAge(25);
+        ruleEngine.registerRule(annotatedRuleExample);
+        ruleEngine.fireRules();
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <!-- Textual  Rule Example -->
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Textual Rule Example</span></h2>
+                        </div>
+                        <div class="panel-body">
+
+                            <span class="highlight"> Rules</span>
+                            <pre class="prettyprint"><code class="language-java">age between [ 19 , 25 ] And group = 'adult' And title = 'Mr' And gender = 'Male'
+age between [ 10 , 18 ] And group = 'teenager' And title = 'Ms' And gender = 'Female'</code></pre>
+
+                            <!-- Rule Example Start-->
+
+                            <span class="highlight">Rule</span>
+                            <pre class="prettyprint"><code class="language-java">@Rule(name = "textualRule", priority = 0)
+public class TextualRule {
+    Logger logger = Logger.getLogger(TextualRule.class);
+    private String rule;
+    private File fileRule;
+    private Person person;
+
+    @Condition(type = ConditionType.TEXT, order = 0)
+    public boolean condition(TextualRuleEngine textualRuleEngine) {
+        logger.info("Inside Condition 1");
+        return textualRuleEngine.evaluate(rule, Person.class, person);
+    }
+
+    @Condition(type = ConditionType.TEXT, order = 1)
+    public boolean condition2(TextualRuleEngine textualRuleEngine) {
+        logger.info("Inside Condition 2");
+        return textualRuleEngine.evaluate(fileRule, Person.class, person);
+    }
+
+    @Before
+    public void beforeAction() {
+        logger.info("Before Condition");
+    }
+
+    @After
+    public void afterAction() {
+        logger.info("After Condition");
+    }
+
+    @Success
+    public void success() {
+        logger.info("Rule Successfully Run");
+    }
+
+    @Fail
+    public void fail() {
+        logger.error("Rule Failed");
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
+
+    public void setFileRule(File fileRule) {
+        this.fileRule = fileRule;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+}</code></pre>
+                            <span class="highlight"> Test Case</span>
+                            <pre class="prettyprint"><code class="language-java">public class TextualRuleTest extends TestCase {
+    @Test
+    public void testApp() throws IllegalRuleException {
+
+        RuleEngineBuilder ruleEngineBuilder = new RuleEngineBuilder();
+        ruleEngineBuilder.satisfyCondition(PARAM.ANY).stopOnFail(false);
+        RuleEngine ruleEngine = ruleEngineBuilder.build();
+
+        Person male = new Person();
+        male.setAge(23);
+        male.setGroup("adult");
+        male.setGender("Male");
+        male.setTitle("Mr");
+
+        TextualRule textualRule = new TextualRule();
+        textualRule.setPerson(male);
+        textualRule.setRule("age between [ 19 , 25 ] And group = 'adult' And title = 'Mr' And gender = 'Male'");
+        URL url = this.getClass().getClassLoader().getResource("rules/age_rule.dvr");
+        textualRule.setFileRule(new File(url.getFile()));
+        ruleEngine.registerRule(textualRule);
+
+
+        Person female = new Person();
+        female.setAge(30);
+        female.setGroup("teenager");
+        female.setGender("Female");
+        female.setTitle("Ms");
+
+        TextualRule textualRule2 = new TextualRule();
+        textualRule2.setPerson(female);
+        textualRule2.setRule("age between [ 10 , 18 ] And group = 'teenager' And title = 'Ms' And gender = 'Female'");
+        URL url2 = this.getClass().getClassLoader().getResource("rules/age_rule2.dvr");
+        textualRule2.setFileRule(new File(url2.getFile()));
+        ruleEngine.registerRule(textualRule2);
+        ruleEngine.fireRules();
+
+    }
+}</code></pre>
+
+                            <span class="highlight"> Output</span>
+                            <pre><code class="language-java">INFO  [org.dvare.rule.TextualRule] - Before Condition
+INFO  [org.dvare.rule.TextualRule] - Inside Condition 1
+INFO  [org.dvare.rule.TextualRule] - After Condition
+<span class="highlight">INFO  [org.dvare.rule.TextualRule] - Rule Successfully Run</span>
+INFO  [org.dvare.rule.TextualRule] - Before Condition
+INFO  [org.dvare.rule.TextualRule] - Inside Condition 2
+INFO  [org.dvare.rule.TextualRule] - After Condition
+<span class="highlight">INFO  [org.dvare.rule.TextualRule] - Rule Successfully Run</span>
+INFO  [org.dvare.rule.TextualRule] - Before Condition
+INFO  [org.dvare.rule.TextualRule] - Inside Condition 1
+INFO  [org.dvare.rule.TextualRule] - After Condition
+<span class="highlight-error">ERROR [org.dvare.rule.TextualRule] - Rule Failed</span>
+INFO  [org.dvare.rule.TextualRule] - Before Condition
+INFO  [org.dvare.rule.TextualRule] - Inside Condition 2
+INFO  [org.dvare.rule.TextualRule] - After Condition
+<span class="highlight-error">ERROR [org.dvare.rule.TextualRule] - Rule Failed</span></code></pre>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- Rest Rule Engine-->
+
+                <section>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h1>Rest Rule Engine</h1></div>
+                    </div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2><span class="highlight">Rule Engine - Initialization</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <article>
+
+                                <div class="clearfix"></div>
+
+                                <p></p>
+                                <p>Here you can describe the function. Multilines are possible.</p>
+                                <p></p>
+
+                                <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span
+                                        class="pln">/api/ruleEngine/</span></code></pre>
+                                <h3>Parameter</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                                <h3>Success 201</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="code">ruleEngine</td>
+                                        <td>
+                                            String
+                                        </td>
+                                        <td>
+                                            <p>Id of Created Rule Engine</p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h3>Error</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                                <h3>Response</h3>
+                                <ul class="nav nav-tabs nav-tabs-examples">
+                                    <li class="active">
+                                        <a href="#error-examples-User-PostUser-0_3_0-0">Response (/api/ruleEngine/):</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <pre class="prettyprint" data-type="json"><code
+                                                class="language-json"></code></pre>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2><span class="highlight">Rules Registration</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <article>
+
+                                <div class="clearfix"></div>
+
+                                <p></p>
+                                <p>Here you can describe the function. Multilines are possible.</p>
+                                <p></p>
+
+                                <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span
+                                        class="pln">/api/ruleEngine/{ruleEngine}/rules/</span></code></pre>
+                                <h3>Parameter</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="code">ruleName</td>
+                                        <td>String</td>
+                                        <td>Name of Rule</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">priority</td>
+                                        <td>Integer</td>
+                                        <td>Priority of rule in rule Engine</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">rule</td>
+                                        <td>String</td>
+                                        <td>Dvare Rule Syntax</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">modelTypes</td>
+                                        <td>JSON Object</td>
+                                        <td>JSON Object of name and Dvare dataType</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">model</td>
+                                        <td>JSON Object</td>
+                                        <td>JSON Object of name and values</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3>Success 201</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="code">ruleId</td>
+                                        <td>
+                                            String
+                                        </td>
+                                        <td>
+                                            <p>Id of Created Rule </p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h3>Error</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                                <h3>Response</h3>
+                                <ul class="nav nav-tabs nav-tabs-examples">
+                                    <li class="active">
+                                        <a href="#error-examples-User-PostUser-0_3_0-0">Response (/api/ruleEngine/):</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <pre class="prettyprint" data-type="json"><code
+                                                class="language-json"></code></pre>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    </div>
+
+
+                    <br/>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2><span class="highlight">Rules Engine Fire Rules</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <article>
+
+                                <div class="clearfix"></div>
+
+                                <p></p>
+                                <p>Here you can describe the function. Multilines are possible.</p>
+                                <p></p>
+
+                                <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span
+                                        class="pln">/api/ruleEngine/{ruleEngine}/fire/</span></code></pre>
+                                <h3>Parameter</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    </tbody>
+                                </table>
+
+                                <h3>Success 200</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+                                        <th style="width: 10%">Type</th>
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="code">ruleId</td>
+                                        <td>
+                                            Id of Rule
+                                        </td>
+                                        <td>
+                                            <p>Id of Created Rule </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">ruleName</td>
+                                        <td>
+                                            String
+                                        </td>
+                                        <td>
+                                            <p>Name of rule </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">rule</td>
+                                        <td>
+                                            String
+                                        </td>
+                                        <td>
+                                            <p>Dvare syntax of rule </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="code">result</td>
+                                        <td>
+                                            Boolean
+                                        </td>
+                                        <td>
+                                            <p>Result of Rule</p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h3>Error</h3>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30%">Field</th>
+
+                                        <th style="width: 70%">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                                <h3>Response</h3>
+                                <ul class="nav nav-tabs nav-tabs-examples">
+                                    <li class="active">
+                                        <a href="#error-examples-User-PostUser-0_3_0-0">Response (/api/ruleEngine/):</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <pre class="prettyprint" data-type="json"><code
+                                                class="language-json"></code></pre>
+                                    </div>
+                                </div>
+
+                            </article>
+                        </div>
+                    </div>
+
+                </section>
+
+                <div id="footer">
+                    <div id="api-_footer">
+                        <p>Suggestions, contact, support and error reporting on <a
+                                href="https://github.com/dvare/rules/issues">GitHub</a></p>
+                    </div>
+                </div>
+                <div id="generator">
+                    <div class="content">
+                        DVARE 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="forkme">
+        <a href="https://github.com/dvare/rules#fork-destination-box">
+            <img src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
+                 alt="Fork me on GitHub">
+        </a>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/bootstrap-toc.js"></script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css"
+        defer="defer"></script>
+
+
+</body>
+</html>
