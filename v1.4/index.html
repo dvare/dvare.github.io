@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DVARE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="css/style.css" rel="stylesheet" media="screen, print">
+    <link href="css/bootstrap-toc.css" rel="stylesheet"/>
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body data-offset="100" data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class=" col-lg-2 col-sm-3 col-md-3 col-xs-12" id="side-menu">
+
+            <nav id="toc" data-spy="affix" data-toggle="toc" class="side-menu-nav"></nav>
+
+
+        </div>
+        <div class="col-lg-10 col-sm-9 col-md-9 col-xs-12" id="content">
+            <div id="row">
+                <div class="col-md-12" style="margin-bottom: 10px;background-color: #0088cc;">
+                    <img src="img/logo.png" alt="DVARE" class="logo"/>
+                </div>
+            </div>
+
+            <div id="sections">
+
+
+                <h1>What is DVARE Framework</h1>
+                <br/>
+                <p><span class="highlight">DVARE FRAMEWORK</span> is lightweight expression evaluator for Java, that
+                    allows evaluating Arithmetic and boolean Comparison expression and
+                    <span class="highlight"><a href="rules.html">DVARE RULES</a> </span>
+                    is business rule engine built DVARE Framework on which provides an
+                    interface for embedding POJO rules in your application. You can turn your POJOs into
+                    business rules with a couple of intuitive annotations and you can evaluate
+                    both text and java based rules.</p>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h1>Usage</h1>
+                    </div>
+                    <div class="panel-body">
+
+
+                            <pre><code class="language-xml" data-lang="xml"><span
+                                    class="repo">&lt;repository&gt;</span>
+    <span class="repo">&lt;id&gt;</span>maven-repo<span class="repo">&lt;/id&gt;</span>
+    <span class="repo">&lt;url&gt;</span>http://repo1.maven.org/maven/<span class="repo">&lt;/url&gt;</span>
+<span class="repo">&lt;/repository&gt;</span> </code></pre>
+
+
+                        <pre><code class="language-xml" data-lang="xml">
+<span class="repo">&lt;dependency&gt;</span>
+    <span class="repo">&lt;groupId&gt;</span>org.dvare<span class="repo">&lt;/groupId&gt;</span>
+    <span class="repo">&lt;artifactId&gt;</span>dvare-framework<span class="repo">&lt;/artifactId&gt;</span>
+    <span class="repo">&lt;version&gt;</span>1.3<span class="repo">&lt;/version&gt;</span>
+<span class="repo">&lt;/dependency&gt;</span>
+    </code></pre>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- Configuration -->
+
+
+            <section>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h1>Configuration</h1></div>
+                    <div class="panel-body">
+
+                        <!--Basic Rule Engine-->
+
+                        <div><span class="highlight">RuleConfiguration</span>
+                            <pre class="prettyprint"><code class="language-java">RuleConfiguration ruleConfiguration= new RuleConfiguration(new String[]{"org.dvare.function"});</code></pre>
+                        </div>
+
+                        <!--Spring Integration-->
+
+                        <div>
+                            <span class="highlight">Spring Integration</span> <br/>
+
+                            <!-- Configuration File -->
+                            application-context.xml
+                            <pre class="prettyprint"><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"&gt;
+    &lt;bean id="ruleEngine" class="org.dvare.spring.DvareConfigFactoryBean"&gt;
+        &lt;property name="functions"&gt;
+        &lt;/property&gt;
+            &lt;list&gt;
+                 &lt;value&gt;org.dvare.function&lt;/value&gt;
+            &lt;/list&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;</code></pre>
+                            <!--  Rule Engine -->
+                            Rule Engine
+                            <pre class="prettyprint"><code class="language-java">ApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+RuleConfiguration ruleConfiguration = context.getBean(RuleConfiguration.class);</code></pre>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Dvare FrameWork -->
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h1>API Documentation </h1></div>
+            </div>
+
+
+            <section>
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading"><h2><span class="highlight">Data Types</span></h2></div>
+                    <div class="panel-body">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Data Type</th>
+                                <th>Type Syntax</th>
+                                <th>List Type Syntax</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>String</td>
+                                <td><span class="highlight">'Param'</span></td>
+                                <td><span class="highlight">[ 'Param1' , 'Param2' ]</span></td>
+                            </tr>
+                            <tr>
+                                <td>Integer</td>
+                                <td><span class="highlight">4</span></td>
+                                <td><span class="highlight">[ 2 , 5 ]</span></td>
+                            </tr>
+                            <tr>
+                                <td>Float</td>
+                                <td><span class="highlight">4.2</span></td>
+                                <td><span class="highlight">[ 3.1 , 5.5 ]</span></td>
+                            </tr>
+                            <tr>
+                                <td>Boolean</td>
+                                <td><span class="highlight">true</span> or <span class="highlight">false</span>
+                                </td>
+                                <td><span class="highlight">[ true , false ]</span></td>
+                            </tr>
+                            <tr>
+                                <td>Regex</td>
+                                <td><span class="highlight">R'*'</span></td>
+                                <td><span class="highlight">[ R'*' , R'*' ]</span></td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td><span class="highlight">15-01-12016 </span> or <span class="highlight">date(15-01-12016 , dd-MM-yyyy)</span>
+                                </td>
+                                <td><span class="highlight">[15-01-2016 , 20-02-2016]</span></td>
+                            </tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Comparison Operations</span></h2></div>
+                        <div class="panel-body">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th> Operation Name</th>
+                                    <th> Syntax</th>
+                                    <th> DataTypes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td> EQUAL</td>
+                                    <td> eq, =</td>
+                                    <td> Integer, Float, String, Boolean, Regex, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> NOT EQUAL</td>
+                                    <td> ne, !=, <></td>
+                                    <td> Integer, Float, String, Boolean, Regex, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> LESS</td>
+                                    <td> lt, <</td>
+                                    <td> Integer, Float, String, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> LESS EQUAL</td>
+                                    <td> le, <=</td>
+                                    <td> Integer, Float, String, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> GERATER</td>
+                                    <td> gt, ></td>
+                                    <td> Integer, Float, String, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> GERATER EQUAL</td>
+                                    <td> ge, >=</td>
+                                    <td> Integer, Float, String, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> IN</td>
+                                    <td> IN,In ,in</td>
+                                    <td> Integer, Float, String, Boolean,Regex, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> NOT IN</td>
+                                    <td> NOTIN,NotIn ,notIn</td>
+                                    <td> Integer, Float, String, Boolean,Regex, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> BETWEEN</td>
+                                    <td> Between, between</td>
+                                    <td> Integer, Float, Date</td>
+                                </tr>
+                                <tr>
+                                    <td> AND</td>
+                                    <td> AND, And, and</td>
+                                    <td> Boolean</td>
+                                </tr>
+                                <tr>
+                                    <td> OR</td>
+                                    <td> OR, Or, or</td>
+                                    <td> Boolean</td>
+                                </tr>
+                                <tr>
+                                    <td> IMPLIES</td>
+                                    <td> Implies, implies, =></td>
+                                    <td> Boolean</td>
+                                </tr>
+                                <tr>
+                                    <td> NOT</td>
+                                    <td> NOT, Not, not</td>
+                                    <td> Boolean</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Arithmetic Operations</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th> Operation Name</th>
+                                    <th> Syntax</th>
+                                    <th> DataTypes</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td> Add</td>
+                                    <td> add, +</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Subtract</td>
+                                    <td> sub, -</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Multiple</td>
+                                    <td> mul, *</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Divide</td>
+                                    <td> div, /</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Pow</td>
+                                    <td> pow, ^</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Minimum</td>
+                                    <td> min</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Maximum</td>
+                                    <td> max</td>
+                                    <td> Integer, Float</td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h2><span class="highlight">Type Operations</span></h2>
+                        </div>
+                        <div class="panel-body">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th> Operation Name</th>
+                                    <th> Syntax</th>
+                                    <th>Supported DataTypes</th>
+                                    <th> Arguments</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td> To String</td>
+                                    <td> toString()</td>
+                                    <td> Integer, Float, String, Boolean, Date</td>
+                                    <td>Nill</td>
+                                </tr>
+                                <tr>
+                                    <td> To Integer</td>
+                                    <td> toInteger()</td>
+                                    <td> String</td>
+                                    <td>Nill</td>
+                                </tr>
+                                <tr>
+                                    <td> To Date</td>
+                                    <td> toDate()</td>
+                                    <td> String</td>
+                                    <td>Nill</td>
+
+                                </tr>
+                                <tr>
+                                    <td> Substring</td>
+                                    <td> substring()</td>
+                                    <td> String</td>
+                                    <td> [Integer,Integer]</td>
+                                </tr>
+                                <tr>
+                                    <td> Append</td>
+                                    <td> append()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+                                <tr>
+                                    <td> Append</td>
+                                    <td> append()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+                                <tr>
+                                    <td> Prepend</td>
+                                    <td> prepend()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+                                <tr>
+                                    <td> Contains</td>
+                                    <td> contains()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+                                <tr>
+                                    <td> Starts With</td>
+                                    <td> startsWith()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+                                <tr>
+                                    <td> Ends With</td>
+                                    <td> endsWith()</td>
+                                    <td> String</td>
+                                    <td> [String]</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Function Invocation -->
+            <section>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h2><span class="highlight">Function Invocation</span></h2></div>
+                    <div class="panel-body">
+                        <!-- Description -->
+                        <p><span class="highlight">DVARE FRAMEWORK</span> allows to invoke java methods inside
+                            the
+                            rule.
+                            For
+                            Invocation you need to register
+                            class methods. For Registration annotate Java class with <span class="highlight">@FunctionService</span>
+                            and annotate method with
+                            <span class="highlight">@FunctionMethod</span> with return type and parameters
+                            elements.
+                            You
+                            also need to define package in rule configuration which use to scan these classes at
+                            run
+                            time.
+
+                            <!-- RuleEngine-->
+                        <div class="highlight">Rule Engine Configuration</div>
+                        <pre class="prettyprint"><code class="language-java">RuleConfiguration factory = new RuleConfiguration(new String[]{"org.dvare.function"});</code></pre>
+
+                        <!-- Function Class-->
+                        <div class="highlight">Function Class</div>
+                        <pre class="prettyprint"><code class="language-java">package org.dvare.function;
+@FunctionService
+public class TestFunction {
+    @FunctionMethod(returnType = DataType.IntegerType, list = false, parameters = {DataType.IntegerType})
+    public Integer testFunction(Integer variable) {
+        System.out.println("inside testFunction with argument value: " + variable);
+        return variable;
+    }
+}
+</code></pre>
+                        </p>
+
+                        <table>
+                            <thead>
+                            <tr>
+                                <th> Operation Name</th>
+                                <th> Syntax</th>
+                                <th> DataTypes</th>
+                                <th> Operand</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td> Function Call</td>
+                                <td> fun ( name , argements)</td>
+                                <td> Literal, Integer, Float, String, Boolean, Regex, Date</td>
+                                <td> Single or List</td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+            <section>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><span class="highlight">Dvare Example</span></h2></div>
+                    <div class="panel-body">
+<pre class="prettyprint"><code class="language-java">public class DvareRuleTest extends TestCase {
+    SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+    @Test
+    public void testApp() throws ExpressionParseException, InterpretException, ParseException {
+        RuleConfiguration factory = new RuleConfiguration(new String[]{"org.dvare.function"});
+
+        String exp = "Variable2 = (1 + 2) " +
+                " And Variable0 <= fun( testFunction , 10 ) " +
+                " And Variable1 in ['A','B'] " +
+                " And Variable2 between [2,4]" +
+                " And Variable3 > 3.0 " +
+                " And Variable4 = false " +
+                " And Variable5 in [12-05-2016,13-05-2016] " +
+                " And Variable6 in [12-05-2016-15:30:00,13-05-2016-15:30:00] " +
+                " And Variable7 in [R'B1.*',R'A1.*'] ";
+
+        Expression expression = factory.getParser().fromString(exp, EqualOperation.class);
+        Rule rule = new org.dvare.binding.rule.Rule(expression);
+
+        EqualOperation equalOperation = new EqualOperation();
+        equalOperation.setVariable0(10);
+        equalOperation.setVariable1("A");
+        equalOperation.setVariable2(3);
+        equalOperation.setVariable3(3.2f);
+        equalOperation.setVariable4(false);
+        equalOperation.setVariable5(dateFormat.parse("12-05-2016"));
+        equalOperation.setVariable6(dateTimeFormat.parse("12-05-2016-15:30:00"));
+        equalOperation.setVariable7("A1B2");
+
+        RuleEvaluator evaluator = factory.getEvaluator();
+        boolean result = evaluator.evaluate(rule, equalOperation);
+        assertTrue(result);
+    }
+}</code></pre>
+                        <pre class="prettyprint"><code class="language-java">package org.dvare.function;
+@FunctionService
+public class TestFunction {
+    @FunctionMethod(returnType = DataType.IntegerType, list = false, parameters = {DataType.IntegerType})
+    public Integer testFunction(Integer variable) {
+        System.out.println("inside testFunction with argument value: " + variable);
+        return variable;
+    }
+}
+</code></pre>
+
+                    </div>
+                </div>
+
+            </section>
+            <div id="footer">
+                <div id="api-_footer">
+                    <p>Suggestions, contact, support and error reporting on <a
+                            href="https://github.com/dvare/dvare-framework/issues">GitHub</a></p>
+                </div>
+            </div>
+            <div id="generator">
+                <div class="content">
+                    DVARE 2016
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="forkme">
+    <a href="https://github.com/dvare/dvare-framework#fork-destination-box">
+        <img src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
+             alt="Fork me on GitHub">
+    </a>
+</div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/bootstrap-toc.js"></script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css"
+        defer="defer"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#toc ul").append('<li><a href="dvare-framework/index.html">API Docs</a></li>');
+    });
+</script>
+
+</body>
+</html>
