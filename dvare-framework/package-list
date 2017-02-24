@@ -19,7 +19,9 @@ org.dvare.expression.operation.aggregation
 org.dvare.expression.operation.arithmetic
 org.dvare.expression.operation.chain
 org.dvare.expression.operation.condition
+org.dvare.expression.operation.list
 org.dvare.expression.operation.logical
+org.dvare.expression.operation.utility
 org.dvare.expression.operation.validation
 org.dvare.expression.veriable
 org.dvare.parser
